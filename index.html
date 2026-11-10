@@ -3,21 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#22392c">
+<meta name="theme-color" content="#1e3a5f">
 <title>Sổ Nhắc Việc</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --reu:#22392c; --reu-sang:#2f4d3b; --reu-mo:#a9bfae;
-  --nen:#eceee8; --giay:#ffffff; --chu:#1b231e; --mo:#66706a; --ke:#dde1da;
-  --do:#c4372f; --vang:#d4931a; --lam:#2d6fb7; --xam:#9aa39c; --la:#3b8a57;
-  --do-nhat:#fbe9e7; --vang-nhat:#fbf1dc; --lam-nhat:#e6eef8; --la-nhat:#e5f2ea;
+  --reu:#1e3a5f; --reu-sang:#2a4b75; --reu-mo:#e8c468;
+  --nen:#f3f5f9; --giay:#ffffff; --chu:#1e293b; --mo:#64748b; --ke:#e2e8f0;
+  --do:#d64545; --vang:#c9962b; --lam:#2f6fb5; --xam:#94a3b8; --la:#2e9d63;
+  --do-nhat:#fdecec; --vang-nhat:#fbf3e2; --lam-nhat:#e7eff9; --la-nhat:#e4f4ea;
 }
 @media (prefers-color-scheme:dark){:root{
-  --reu:#1a2c22; --reu-sang:#26402f; --nen:#111612; --giay:#1a201c; --chu:#e4e9e5; --mo:#97a29a; --ke:#2a332d;
-  --do-nhat:#3a1d1a; --vang-nhat:#382c14; --lam-nhat:#17283b; --la-nhat:#16301f;
+  --reu:#162b47; --reu-sang:#21406a; --nen:#0f1623; --giay:#182233; --chu:#e2e8f0; --mo:#94a3b8; --ke:#273347;
+  --do-nhat:#3a1e22; --vang-nhat:#362a14; --lam-nhat:#172a42; --la-nhat:#153024;
 }}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -30,22 +30,22 @@ button{cursor:pointer}
 .dau{background:var(--reu);color:#fff;padding:18px 20px 64px}
 .dau-trong{max-width:760px;margin:0 auto}
 .thanh-tren{display:flex;align-items:center;gap:8px}
-.ten-so{font-weight:700;font-size:15px;flex:1;color:var(--reu-mo)}
+.ten-so{font-weight:700;font-size:15px;flex:1;color:#fff;opacity:.9}
 .nut-dau{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:10px;padding:7px 12px;font-size:14px}
 .nut-dau:hover{background:rgba(255,255,255,.18)}
-.thu{margin:22px 0 0;font-size:17px;color:var(--reu-mo);font-weight:500}
+.thu{margin:22px 0 0;font-size:17px;color:var(--reu-mo);font-weight:600}
 .ngay-lon{margin:0;font-size:44px;line-height:1.05;font-weight:800;letter-spacing:-.02em}
-.tom-tat{margin:12px 0 0;font-size:15.5px;color:#dfe8e1}
+.tom-tat{margin:12px 0 0;font-size:15.5px;color:#d6e0ee}
 .tom-tat b{color:#fff}
 .tom-tat .so-do{color:#ffb3ab}
 .dai-mau{display:flex;height:8px;border-radius:8px;overflow:hidden;margin-top:16px;background:rgba(255,255,255,.12)}
 .dai-mau i{display:block;height:100%}
-.trang-thai{font-size:12.5px;color:var(--reu-mo);margin-top:8px;min-height:18px}
+.trang-thai{font-size:12.5px;color:#a9bcd6;margin-top:8px;min-height:18px}
 .trang-thai.loi{color:#ffb3ab}
 
 /* ===== Thân ===== */
 .than{max-width:760px;margin:-44px auto 0;padding:0 16px 110px}
-.o-nhap{background:var(--giay);border-radius:16px;padding:14px;box-shadow:0 6px 24px rgba(20,40,28,.12)}
+.o-nhap{background:var(--giay);border-radius:16px;padding:14px;box-shadow:0 6px 24px rgba(20,35,60,.12)}
 .o-nhap textarea{width:100%;border:none;resize:none;background:transparent;font-size:16px;line-height:1.5;min-height:52px;padding:4px 2px;outline:none}
 .o-nhap textarea::placeholder{color:var(--xam)}
 .xem-truoc:empty{display:none}
@@ -99,7 +99,8 @@ h2.nhom span.so{color:var(--mo);font-weight:500}
 .han-ben .ngay{font-size:12px;color:var(--mo);margin-top:2px}
 .han-ben .con{font-size:12px;font-weight:600;margin-top:3px}
 .viec.qua_han .gio,.viec.qua_han .con{color:var(--do)}
-.viec.hom_nay .gio,.viec.hom_nay .con{color:var(--vang)}
+.viec.hom_nay .gio,.viec.hom_nay .con{color:#a87a1c}
+@media (prefers-color-scheme:dark){.viec.hom_nay .gio,.viec.hom_nay .con{color:var(--vang)}}
 .viec.dang_lam .con{color:var(--lam)}
 .viec.hoan_thanh .han-ben{opacity:.6}
 .thao-tac{grid-column:2 / -1;display:flex;gap:6px;margin-top:6px}
@@ -109,11 +110,11 @@ h2.nhom span.so{color:var(--mo);font-weight:500}
 .trong{text-align:center;color:var(--mo);padding:36px 12px}
 .trong b{display:block;color:var(--chu);font-size:16px;margin-bottom:4px}
 
-.nut-noi{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));width:56px;height:56px;border-radius:18px;border:none;background:var(--reu);color:#fff;font-size:30px;line-height:1;box-shadow:0 8px 20px rgba(20,40,28,.35);display:none;z-index:5}
+.nut-noi{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));width:56px;height:56px;border-radius:18px;border:none;background:var(--reu);color:#fff;font-size:30px;line-height:1;box-shadow:0 8px 20px rgba(20,35,60,.35);display:none;z-index:5}
 
 /* ===== Hộp thoại ===== */
 dialog{border:none;border-radius:18px;background:var(--giay);color:var(--chu);padding:0;width:min(520px,calc(100vw - 32px));box-shadow:0 20px 50px rgba(0,0,0,.3)}
-dialog::backdrop{background:rgba(15,25,18,.5)}
+dialog::backdrop{background:rgba(15,23,40,.5)}
 dialog form{padding:20px}
 dialog h2{margin:0 0 14px;font-size:19px}
 .truong{margin-bottom:12px}
@@ -154,7 +155,6 @@ dialog h2{margin:0 0 14px;font-size:19px}
   <div class="dau-trong">
     <div class="thanh-tren">
       <span class="ten-so">Sổ Nhắc Việc</span>
-      <button class="nut-dau" id="nutGui" title="Gửi ngay bản tổng hợp về Telegram">📨<span class="chu-dai"> Gửi Telegram</span></button>
       <button class="nut-dau" id="nutCaiDat" title="Kết nối lưu trữ">⚙<span class="chu-dai"> Cài đặt</span></button>
     </div>
     <p class="thu" id="thuHomNay"></p>
@@ -176,7 +176,7 @@ dialog h2{margin:0 0 14px;font-size:19px}
     </div>
   </div>
 
-  <div id="baoThu" class="bao-thu" hidden>Đang dùng thử: việc chỉ lưu trên máy này và chưa gửi Telegram. Bấm <b>⚙ Cài đặt</b> để kết nối, các việc đã nhập vẫn được giữ.</div>
+  <div id="baoThu" class="bao-thu" hidden>Đang dùng thử: việc chỉ lưu trên máy này, máy khác chưa xem được. Bấm <b>⚙ Cài đặt</b> để kết nối, các việc đã nhập vẫn được giữ.</div>
 
   <nav class="loc" id="theSo"></nav>
   <input class="tim" id="oTim" type="search" placeholder="Tìm theo tên việc, ghi chú, người giao">
@@ -230,7 +230,6 @@ dialog h2{margin:0 0 14px;font-size:19px}
 <script>
 "use strict";
 const KHOA_CH = "nhacviec_cauhinh", KHOA_DL = "nhacviec_dulieu", DUONG = "data/cong-viec.json";
-const TEN_LICH = "bao-cao-telegram.yml";
 const THU = ["Chủ nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"];
 const TEN_LAP = {ngay:"Lặp hàng ngày", tuan:"Lặp hàng tuần", thang:"Lặp hàng tháng"};
 const $ = id => document.getElementById(id);
@@ -562,7 +561,7 @@ async function keoVe(){
 }
 async function moTaLoi(r){
   if (r.status === 401) return "Mã truy cập sai hoặc đã hết hạn";
-  if (r.status === 403) return "Mã truy cập không đủ quyền (cần quyền Contents và Actions: đọc và ghi)";
+  if (r.status === 403) return "Mã truy cập không đủ quyền (cần quyền Contents: Read and write)";
   if (r.status === 404) return "Không thấy kho — kiểm tra tên tài khoản, tên kho, hoặc mã chưa được cấp quyền cho kho này";
   let t = ""; try { t = (await r.json()).message; } catch(e){}
   return `Lỗi ${r.status} ${t}`;
@@ -611,14 +610,7 @@ $("formCaiDat").addEventListener("submit", async e => {
     await dongBo();
   } catch (err) { cfg = cu; $("cKetQua").textContent = "❌ " + err.message; }
 });
-$("nutGui").onclick = async () => {
-  if (!daKetNoi()) { alert("Cần kết nối GitHub trước (⚙ Cài đặt). Bản tin Telegram được gửi từ kho dữ liệu."); return; }
-  clearTimeout(henLuu); await dayLen();
-  trangThai("Đang yêu cầu gửi Telegram…");
-  const r = await goiGH(`/actions/workflows/${TEN_LICH}/dispatches`, {method: "POST", body: JSON.stringify({ref: "main"})});
-  if (r.status === 204) trangThai("Đã yêu cầu gửi — tin nhắn tới Telegram sau khoảng 30 giây – 1 phút");
-  else trangThai("Không gửi được: " + await moTaLoi(r), true);
-};
+
 
 veLai(); xemTruoc();
 if (daKetNoi()) dongBo(); else trangThai("");
