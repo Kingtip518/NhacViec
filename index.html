@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sổ Nhắc Việc</title>
+<style>
+:root{--nen:#f3f4f7;--the:#fff;--chu:#1c2230;--mo:#6b7280;--vien:#e2e5eb;--chinh:#1f5fbf;
+--do:#d23c3c;--cam:#e0861b;--xanh:#2f7de1;--xam:#8b93a3;--la:#23935a;--bong:0 1px 3px rgba(0,0,0,.07)}
+@media (prefers-color-scheme:dark){:root{--nen:#11141a;--the:#1a1e26;--chu:#e6e9ef;--mo:#9aa3b2;--vien:#2a303b;--chinh:#5b9bff;--bong:none}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--nen);color:var(--chu);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.khung{max-width:860px;margin:0 auto;padding:16px}
+header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+header h1{font-size:21px;margin:0;flex:1}
+.tt{font-size:12.5px;color:var(--mo)}
+.tt.loi{color:var(--do)}
+button{font:inherit;cursor:pointer;border:1px solid var(--vien);background:var(--the);color:var(--chu);border-radius:8px;padding:6px 11px}
+button:hover{border-color:var(--chinh)}
+button.chinh{background:var(--chinh);border-color:var(--chinh);color:#fff}
+.bao{background:#fff4e0;color:#7a4b00;border:1px solid #f1d29a;border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:13.5px}
+@media (prefers-color-scheme:dark){.bao{background:#2c2312;color:#f3cf8c;border-color:#5a4520}}
+.o-nhap{background:var(--the);border:1px solid var(--vien);border-radius:12px;padding:12px;box-shadow:var(--bong);margin-bottom:14px}
+textarea,input,select{font:inherit;color:var(--chu);background:var(--the);border:1px solid var(--vien);border-radius:8px;padding:8px 10px;width:100%}
+textarea{resize:vertical;min-height:46px}
+textarea:focus,input:focus,select:focus{outline:2px solid var(--chinh);outline-offset:-1px}
+.goi-y{font-size:12.5px;color:var(--mo);margin-top:6px}
+.xem-truoc{margin-top:8px;font-size:13.5px}
+.xem-truoc div{padding:3px 0;border-top:1px dashed var(--vien)}
+.xem-truoc b{font-weight:600}
+.hang-nut{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.the-so{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px}
+.so{background:var(--the);border:1px solid var(--vien);border-radius:10px;padding:8px 6px;text-align:center;cursor:pointer;box-shadow:var(--bong)}
+.so b{display:block;font-size:22px;line-height:1.2}
+.so span{font-size:12px;color:var(--mo)}
+.so.chon{outline:2px solid var(--chinh)}
+.so.qh b{color:var(--do)}.so.hn b{color:var(--cam)}.so.dl b{color:var(--xanh)}.so.cl b{color:var(--xam)}.so.ht b{color:var(--la)}
+@media (max-width:620px){.the-so{grid-template-columns:repeat(3,1fr)}}
+.tim{margin-bottom:10px}
+h3.nhom{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--mo);margin:16px 0 6px}
+.viec{background:var(--the);border:1px solid var(--vien);border-left:5px solid var(--xam);border-radius:10px;padding:10px 12px;margin-bottom:8px;box-shadow:var(--bong)}
+.viec.qua_han{border-left-color:var(--do)}.viec.hom_nay{border-left-color:var(--cam)}
+.viec.dang_lam{border-left-color:var(--xanh)}.viec.hoan_thanh{border-left-color:var(--la);opacity:.78}
+.viec .ten{font-weight:600;word-break:break-word}
+.viec.hoan_thanh .ten{text-decoration:line-through}
+.viec .thong-tin{font-size:13px;color:var(--mo);display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:3px}
+.viec .ghi{font-size:13.5px;margin-top:4px;white-space:pre-wrap}
+.nhan{font-size:11.5px;padding:1px 7px;border-radius:20px;border:1px solid var(--vien);color:var(--mo)}
+.nhan.gap{background:var(--do);border-color:var(--do);color:#fff}
+.nhan.tre{color:var(--do);border-color:var(--do)}
+.nhan.dl{color:var(--xanh);border-color:var(--xanh)}
+.viec .nut{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.viec .nut button{padding:4px 9px;font-size:13px}
+.nut .xong{background:var(--la);border-color:var(--la);color:#fff}
+.nut .lam{background:var(--xanh);border-color:var(--xanh);color:#fff}
+.trong{text-align:center;color:var(--mo);padding:28px 0}
+dialog{border:1px solid var(--vien);border-radius:14px;background:var(--the);color:var(--chu);padding:0;width:min(520px,calc(100vw - 32px))}
+dialog::backdrop{background:rgba(0,0,0,.4)}
+dialog form{padding:16px}
+dialog h2{margin:0 0 10px;font-size:18px}
+.truong{margin-bottom:10px}
+.truong label{display:block;font-size:13px;color:var(--mo);margin-bottom:3px}
+.hai{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chu-dai{display:inline}
+.goi-y-ngan{display:none}
+@media (max-width:620px){.goi-y-ngan{display:inline}}
+/* ===== Điện thoại ===== */
+@media (max-width:620px){
+  .khung{padding:12px 12px 90px}
+  header h1{font-size:19px;flex-basis:100%}
+  header .tt{flex-basis:100%;order:3}
+  header button{flex:1;padding:10px 8px}
+  .chu-dai{display:none}
+  textarea,input,select{font-size:16px;padding:11px 12px}  /* chữ 16 để điện thoại không tự phóng to */
+  button{min-height:42px}
+  .hang-nut button{flex:1}
+  .viec{padding:12px}
+  .viec .nut{display:flex;gap:6px;flex-wrap:nowrap}
+  .viec .nut button{font-size:14px;padding:9px 6px;min-height:42px;flex:1;white-space:nowrap}
+  .viec .nut .xong{flex:1.5}
+  .viec .nut .phu{flex:0 0 44px}
+  .viec .nut .chu{display:none}
+  textarea{min-height:72px}
+  .goi-y-dai{display:none}
+  .so{padding:10px 4px}
+  .hai{grid-template-columns:1fr}
+  dialog{width:100vw;max-width:100vw;max-height:92vh;margin:auto 0 0;border-radius:16px 16px 0 0}
+  dialog .hang-nut button{flex:1}
+  .nut-noi{display:flex}
+}
+.nut-noi{display:none;position:fixed;right:16px;bottom:18px;width:58px;height:58px;border-radius:50%;border:none;
+  background:var(--chinh);color:#fff;font-size:30px;line-height:1;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.28);z-index:5}
+</style>
+</head>
+<body>
+<div class="khung">
+  <header>
+    <h1>📋 Sổ Nhắc Việc</h1>
+    <span id="tt" class="tt"></span>
+    <button id="nutGui" title="Gửi ngay bản tổng hợp về Telegram">📨 Gửi Telegram<span class="chu-dai"> ngay</span></button>
+    <button id="nutCaiDat">⚙ Cài đặt</button>
+  </header>
+
+  <div id="baoThu" class="bao" hidden>Đang chạy <b>thử trên máy này</b>: dữ liệu chỉ lưu trong trình duyệt, chưa lưu lên GitHub và chưa gửi Telegram. Bấm <b>⚙ Cài đặt</b> để kết nối — các việc đã nhập thử vẫn được giữ lại.</div>
+
+  <div class="o-nhap">
+    <textarea id="oNhap" rows="2" placeholder="Nhập việc mới (mỗi dòng một việc), ví dụ: Nộp báo cáo quân số 16h thứ 6 gấp"></textarea>
+    <div class="goi-y"><span class="goi-y-ngan">Ghi hạn bằng lời: <i>16h thứ 6, ngày mai, 15/11, gấp, hàng tuần…</i></span><span class="goi-y-dai">Viết hạn bằng lời, web tự hiểu: <i>hôm nay, ngày mai, ngày kia, sáng/chiều mai, thứ 2…thứ 7, chủ nhật, thứ 6 tuần sau, cuối tháng, 15/11, 8h, 14h30, 2 giờ chiều</i> · thêm chữ <i>gấp</i> để đánh dấu gấp · <i>hàng ngày / hàng tuần / hàng tháng</i> để việc tự lặp lại. Bấm Enter để thêm (Shift+Enter xuống dòng).</span></div>
+    <div id="xemTruoc" class="xem-truoc"></div>
+    <div class="hang-nut">
+      <button class="chinh" id="nutThem">➕ Thêm việc</button>
+      <button id="nutChiTiet">Thêm có đủ chi tiết…</button>
+    </div>
+  </div>
+
+  <div class="the-so" id="theSo"></div>
+  <input class="tim" id="oTim" type="search" placeholder="🔍 Tìm theo tên, ghi chú, người giao…">
+  <div id="danhSach"></div>
+</div>
+<button class="nut-noi" id="nutNoi" title="Thêm việc mới">+</button>
+
+<dialog id="hopViec">
+  <form method="dialog" id="formViec">
+    <h2 id="tieuDeHop">Công việc</h2>
+    <div class="truong"><label>Tên công việc</label><input id="fTen" required></div>
+    <div class="truong"><label>Ghi chú</label><textarea id="fGhi" rows="2"></textarea></div>
+    <div class="hai">
+      <div class="truong"><label>Hạn chót – ngày</label><input id="fNgay" type="date"></div>
+      <div class="truong"><label>Hạn chót – giờ (để trống = hết ngày)</label><input id="fGio" type="time"></div>
+    </div>
+    <div class="hai">
+      <div class="truong"><label>Mức độ</label><select id="fUuTien"><option value="thuong">Thường</option><option value="gap">Gấp</option></select></div>
+      <div class="truong"><label>Lặp lại</label><select id="fLap"><option value="khong">Không lặp lại</option><option value="ngay">Hàng ngày</option><option value="tuan">Hàng tuần</option><option value="thang">Hàng tháng</option></select></div>
+    </div>
+    <div class="hai">
+      <div class="truong"><label>Người giao / nơi giao</label><input id="fNguoi" placeholder="VD: Chỉ huy trưởng, Bộ CHQS"></div>
+      <div class="truong"><label>Trạng thái</label><select id="fTrangThai"><option value="chua_lam">Chưa làm</option><option value="dang_lam">Đang làm</option><option value="hoan_thanh">Đã hoàn thành</option></select></div>
+    </div>
+    <div class="hang-nut" style="justify-content:flex-end">
+      <button value="huy" formnovalidate>Hủy</button>
+      <button class="chinh" value="luu" id="nutLuuViec">Lưu</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="hopCaiDat">
+  <form method="dialog" id="formCaiDat">
+    <h2>⚙ Kết nối lưu trữ và Telegram</h2>
+    <p class="tt" style="margin-top:0">Dữ liệu được lưu vào kho <b>riêng tư</b> trên GitHub của Tú. Mã truy cập chỉ lưu trong trình duyệt của máy đang dùng; mỗi máy (điện thoại, máy tính) nhập một lần.</p>
+    <div class="truong"><label>Tài khoản GitHub</label><input id="cChu" placeholder="Kingtip518"></div>
+    <div class="truong"><label>Tên kho dữ liệu (riêng tư)</label><input id="cKho" placeholder="NhacViec-DuLieu"></div>
+    <div class="truong"><label>Mã truy cập GitHub (token — chuỗi bắt đầu bằng github_pat_)</label><input id="cMa" type="password" autocomplete="off"></div>
+    <div id="cKetQua" class="tt"></div>
+    <div class="hang-nut" style="justify-content:space-between">
+      <button value="ngat" id="nutNgat" formnovalidate>Ngắt kết nối trên máy này</button>
+      <span style="display:flex;gap:8px"><button value="huy" formnovalidate>Đóng</button><button class="chinh" id="nutLuuCD">Lưu và kiểm tra</button></span>
+    </div>
+  </form>
+</dialog>
+
+<script>
+"use strict";
+const KHOA_CH = "nhacviec_cauhinh", KHOA_DL = "nhacviec_dulieu", DUONG = "data/cong-viec.json";
+const TEN_LICH = "bao-cao-telegram.yml";
+const THU = ["Chủ nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"];
+const TEN_LAP = {ngay:"Lặp hàng ngày", tuan:"Lặp hàng tuần", thang:"Lặp hàng tháng"};
+const $ = id => document.getElementById(id);
+
+let cfg = doc(KHOA_CH) || {};
+let ds = (doc(KHOA_DL) || {}).cong_viec || [];
+let sha = null, loc = "can_lam", timKiem = "", henLuu = null, dangLuu = false, luuLai = false, dangSua = null;
+
+function doc(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } }
+function ghi(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+const daKetNoi = () => !!(cfg.chu && cfg.kho && cfg.ma);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad = n => String(n).padStart(2,"0");
+const ngayStr = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const gioStr = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const taoId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+function congNgay(d, n){ const x = new Date(d); x.setDate(x.getDate()+n); return x; }
+function tuNgayStr(s){ const [y,m,d] = s.split("-").map(Number); return new Date(y, m-1, d); }
+
+/* ================= ĐỌC HẠN CHÓT VIẾT BẰNG LỜI ================= */
+const SO_THU = {"2":1,"3":2,"4":3,"5":4,"6":5,"7":6,"hai":1,"ba":2,"tư":3,"năm":4,"sáu":5,"bảy":6};
+function phanTich(dong){
+  let s = " " + dong.trim().replace(/\s+/g," ") + " ";
+  const kq = {ten:"", han_ngay:"", han_gio:"", uu_tien:"thuong", lap_lai:"khong"};
+  const CUOI = "(?=[\\s,.;])";
+  const bo = re => { const m = s.match(re); if (m) s = s.replace(re, " "); return m; };
+  const homNay = new Date(); homNay.setHours(0,0,0,0);
+  let ngay = null, buoi = "";
+
+  if (bo(new RegExp("\\s(gấp|khẩn|hỏa tốc|hoả tốc)" + CUOI, "iu"))) kq.uu_tien = "gap";
+  if (bo(new RegExp("\\shàng ngày" + CUOI, "iu"))) kq.lap_lai = "ngay";
+  else if (bo(new RegExp("\\shàng tuần" + CUOI, "iu"))) kq.lap_lai = "tuan";
+  else if (bo(new RegExp("\\shàng tháng" + CUOI, "iu"))) kq.lap_lai = "thang";
+
+  let m;
+  if ((m = bo(new RegExp("\\s(?:ngày\\s)?(\\d{1,2})\\/(\\d{1,2})(?:\\/(\\d{2,4}))?" + CUOI, "u")))) {
+    let y = m[3] ? (m[3].length === 2 ? 2000 + +m[3] : +m[3]) : homNay.getFullYear();
+    ngay = new Date(y, +m[2]-1, +m[1]);
+    if (!m[3] && ngay < homNay) ngay = new Date(y+1, +m[2]-1, +m[1]);
+  } else if (bo(new RegExp("\\s(hôm nay|trong ngày)" + CUOI, "iu"))) ngay = homNay;
+  else if ((m = bo(new RegExp("\\s(sáng|trưa|chiều|tối)\\smai" + CUOI, "iu")))) { ngay = congNgay(homNay,1); buoi = m[1].toLowerCase(); }
+  else if (bo(new RegExp("\\sngày mai" + CUOI, "iu"))) ngay = congNgay(homNay,1);
+  else if (bo(new RegExp("\\sngày kia" + CUOI, "iu"))) ngay = congNgay(homNay,2);
+  else if (bo(new RegExp("\\scuối tháng" + CUOI, "iu"))) ngay = new Date(homNay.getFullYear(), homNay.getMonth()+1, 0);
+  else if ((m = bo(new RegExp("\\s(?:thứ\\s?(2|3|4|5|6|7|hai|ba|tư|năm|sáu|bảy)|t([2-7])|(chủ nhật|cn))(\\s(?:tuần sau|tuần tới))?" + CUOI, "iu")))) {
+    const dich = m[3] ? 0 : SO_THU[(m[1] || m[2]).toLowerCase()];
+    if (m[4]) {
+      const thuISO = homNay.getDay() || 7;                 // Thứ Hai = 1 … Chủ nhật = 7
+      const thuHaiTuanSau = congNgay(homNay, 8 - thuISO);
+      ngay = congNgay(thuHaiTuanSau, ((dich || 7) - 1));
+    } else {
+      ngay = congNgay(homNay, (dich - homNay.getDay() + 7) % 7);
+    }
+  }
+
+  if ((m = bo(new RegExp("\\s(?:lúc\\s)?(\\d{1,2})\\s?(?:h|giờ|g|:)\\s?(\\d{2})?(?:\\s(sáng|trưa|chiều|tối))?" + CUOI, "iu")))) {
+    let h = +m[1], ph = m[2] ? +m[2] : 0;
+    const b = (m[3] || buoi).toLowerCase();
+    if ((b === "chiều" || b === "tối") && h < 12) h += 12;
+    if (b === "trưa" && h < 11) h += 12;
+    if (h < 24 && ph < 60) kq.han_gio = `${pad(h)}:${pad(ph)}`;
+  } else if (buoi) {
+    kq.han_gio = {"sáng":"08:00","trưa":"11:30","chiều":"14:00","tối":"19:00"}[buoi];
+  }
+  if (!ngay && kq.han_gio) {                 // chỉ ghi giờ: hôm nay, nếu giờ đã qua thì ngày mai
+    const [h, ph] = kq.han_gio.split(":").map(Number);
+    const d = new Date(); ngay = homNay;
+    if (h*60+ph <= d.getHours()*60 + d.getMinutes()) ngay = congNgay(homNay,1);
+  }
+  if (!ngay && kq.lap_lai !== "khong") ngay = homNay;
+  if (ngay) kq.han_ngay = ngayStr(ngay);
+
+  let ten = s.replace(/\s+/g," ").trim().replace(/[,;]\s*$/,"");
+  for (let i = 0; i < 3; i++) ten = ten.replace(/\s*(?:trước|lúc|vào|hạn chót|hạn|chậm nhất)\s*$/iu, "").trim();
+  kq.ten = ten.replace(/^[-–•*\d.)\s]+(?=\S)/u, "").trim() || dong.trim();
+  return kq;
+}
+
+/* ================= TRẠNG THÁI ================= */
+function hanMs(t){
+  if (!t.han_ngay) return null;
+  const [y,m,d] = t.han_ngay.split("-").map(Number);
+  const [h,ph] = t.han_gio ? t.han_gio.split(":").map(Number) : [23,59];
+  return new Date(y, m-1, d, h, ph).getTime();
+}
+function nhom(t){
+  if (t.trang_thai === "hoan_thanh") return "hoan_thanh";
+  const h = hanMs(t);
+  if (h !== null && h < Date.now()) return "qua_han";
+  if (t.han_ngay === ngayStr(new Date())) return "hom_nay";
+  return t.trang_thai === "dang_lam" ? "dang_lam" : "chua_lam";
+}
+function moTaHan(t){
+  if (!t.han_ngay) return "";
+  const d = tuNgayStr(t.han_ngay);
+  let s = `${THU[d.getDay()]} ${pad(d.getDate())}/${pad(d.getMonth()+1)}`;
+  if (d.getFullYear() !== new Date().getFullYear()) s += "/" + d.getFullYear();
+  if (t.han_gio) s += " lúc " + t.han_gio;
+  return s;
+}
+function conLai(t){
+  const h = hanMs(t); if (h === null || t.trang_thai === "hoan_thanh") return "";
+  const ms = h - Date.now(), gio = Math.abs(ms) / 36e5;
+  const ngayLech = Math.round((tuNgayStr(t.han_ngay) - tuNgayStr(ngayStr(new Date()))) / 864e5);
+  if (ms < 0) return gio < 24 ? `trễ ${Math.max(1, Math.floor(gio))} giờ` : `trễ ${Math.floor(gio/24)} ngày`;
+  if (ngayLech === 0) return gio < 1 ? `còn ${Math.max(1, Math.round(gio*60))} phút` : `còn ${Math.floor(gio)} giờ`;
+  if (ngayLech === 1) return "ngày mai";
+  return `còn ${ngayLech} ngày`;
+}
+
+/* ================= HIỂN THỊ ================= */
+const NHAN_NHOM = {qua_han:"Quá hạn", hom_nay:"Hạn hôm nay", dang_lam:"Đang làm", chua_lam:"Chưa làm", hoan_thanh:"Đã hoàn thành"};
+function veLai(){
+  const con = ds.filter(t => !t.da_xoa);
+  const dem = {qua_han:0, hom_nay:0, dang_lam:0, chua_lam:0, hoan_thanh:0};
+  con.forEach(t => dem[nhom(t)]++);
+  const homNay = ngayStr(new Date());
+  const xongHomNay = con.filter(t => t.trang_thai === "hoan_thanh" && (t.ngay_hoan_thanh||"").startsWith(homNay)).length;
+  const the = [["can_lam","Còn phải làm", dem.qua_han+dem.hom_nay+dem.dang_lam+dem.chua_lam, ""],
+    ["qua_han","Quá hạn",dem.qua_han,"qh"],["hom_nay","Hạn hôm nay",dem.hom_nay,"hn"],
+    ["dang_lam","Đang làm",dem.dang_lam,"dl"],["chua_lam","Chưa làm",dem.chua_lam,"cl"],
+    ["hoan_thanh",`Đã xong · hôm nay ${xongHomNay}`,dem.hoan_thanh,"ht"]];
+  $("theSo").innerHTML = the.map(([k,ten,so,lop]) =>
+    `<div class="so ${lop} ${loc===k?"chon":""}" data-loc="${k}"><b>${so}</b><span>${ten}</span></div>`).join("");
+
+  const q = timKiem.toLowerCase();
+  let loc1 = con.filter(t => !q || [t.ten,t.ghi_chu,t.nguoi_giao].join(" ").toLowerCase().includes(q));
+  const sapXep = (a,b) => (hanMs(a) ?? 9e15) - (hanMs(b) ?? 9e15) || (a.uu_tien==="gap"?-1:0) - (b.uu_tien==="gap"?-1:0);
+  let html = "";
+  if (loc === "can_lam") {
+    for (const k of ["qua_han","hom_nay","dang_lam","chua_lam"]) {
+      const nh = loc1.filter(t => nhom(t) === k).sort(sapXep);
+      if (nh.length) html += `<h3 class="nhom">${NHAN_NHOM[k]} (${nh.length})</h3>` + nh.map(veViec).join("");
+    }
+  } else {
+    let nh = loc1.filter(t => nhom(t) === loc);
+    nh = loc === "hoan_thanh" ? nh.sort((a,b) => (b.ngay_hoan_thanh||"").localeCompare(a.ngay_hoan_thanh||"")) : nh.sort(sapXep);
+    html = nh.map(veViec).join("");
+  }
+  $("danhSach").innerHTML = html || `<div class="trong">${q ? "Không tìm thấy việc nào." : "Không có việc nào ở mục này. 👍"}</div>`;
+  $("baoThu").hidden = daKetNoi();
+}
+function veViec(t){
+  const n = nhom(t);
+  const info = [];
+  if (t.han_ngay) info.push(`⏰ ${esc(moTaHan(t))}`);
+  const cl = conLai(t);
+  if (cl) info.push(`<span class="nhan ${n==="qua_han"?"tre":""}">${cl}</span>`);
+  if (t.uu_tien === "gap") info.push(`<span class="nhan gap">GẤP</span>`);
+  if (t.trang_thai === "dang_lam") info.push(`<span class="nhan dl">Đang làm</span>`);
+  if (t.lap_lai && t.lap_lai !== "khong") info.push(`<span class="nhan">🔁 ${TEN_LAP[t.lap_lai]}</span>`);
+  if (t.nguoi_giao) info.push(`👤 ${esc(t.nguoi_giao)}`);
+  if (t.trang_thai === "hoan_thanh" && t.ngay_hoan_thanh) {
+    const [d, g] = t.ngay_hoan_thanh.split(" "); const x = tuNgayStr(d);
+    info.push(`✅ Xong ${g||""} ${pad(x.getDate())}/${pad(x.getMonth()+1)}`);
+  }
+  let nut = "";
+  if (t.trang_thai === "hoan_thanh") nut = `<button data-hd="lam_lai">↩ Làm lại</button>`;
+  else {
+    if (t.trang_thai !== "dang_lam") nut += `<button class="lam" data-hd="bat_dau">▶ Đang làm</button>`;
+    nut += `<button class="xong" data-hd="xong">✔ Hoàn thành</button>`;
+    if (t.trang_thai === "dang_lam") nut += `<button data-hd="ve_chua">⏸ Chưa làm</button>`;
+  }
+  nut += `<button class="phu" data-hd="sua" title="Sửa">✏<span class="chu"> Sửa</span></button><button class="phu" data-hd="xoa" title="Xóa">🗑<span class="chu"> Xóa</span></button>`;
+  return `<div class="viec ${n}" data-id="${t.id}">
+    <div class="ten">${esc(t.ten)}</div>
+    ${info.length ? `<div class="thong-tin">${info.join("")}</div>` : ""}
+    ${t.ghi_chu ? `<div class="ghi">${esc(t.ghi_chu)}</div>` : ""}
+    <div class="nut">${nut}</div></div>`;
+}
+function xemTruoc(){
+  const dong = $("oNhap").value.split("\n").map(x => x.trim()).filter(Boolean);
+  $("xemTruoc").innerHTML = dong.slice(0, 20).map(d => {
+    const p = phanTich(d), them = [];
+    them.push(p.han_ngay ? "Hạn: " + moTaHan(p) : "Chưa có hạn");
+    if (p.uu_tien === "gap") them.push("Gấp");
+    if (p.lap_lai !== "khong") them.push(TEN_LAP[p.lap_lai]);
+    return `<div>→ <b>${esc(p.ten)}</b> · <span class="tt">${esc(them.join(" · "))}</span></div>`;
+  }).join("");
+}
+
+/* ================= THAO TÁC ================= */
+function suaDoi(t){ t.sua_luc = Date.now(); }
+function themMoi(p){
+  const t = {id: taoId(), ten: p.ten, ghi_chu: p.ghi_chu || "", han_ngay: p.han_ngay || "", han_gio: p.han_gio || "",
+    uu_tien: p.uu_tien || "thuong", lap_lai: p.lap_lai || "khong", nguoi_giao: p.nguoi_giao || "",
+    trang_thai: p.trang_thai || "chua_lam", ngay_tao: ngayStr(new Date()) + " " + gioStr(new Date()), ngay_hoan_thanh: ""};
+  if (t.trang_thai === "hoan_thanh") t.ngay_hoan_thanh = t.ngay_tao;
+  suaDoi(t); ds.push(t); return t;
+}
+function hanKeTiep(t){
+  let d = tuNgayStr(t.han_ngay); const homNay = tuNgayStr(ngayStr(new Date()));
+  const buoc = () => {
+    if (t.lap_lai === "ngay") d = congNgay(d,1);
+    else if (t.lap_lai === "tuan") d = congNgay(d,7);
+    else { const goc = tuNgayStr(t.han_ngay).getDate(); const x = new Date(d.getFullYear(), d.getMonth()+1, 1);
+      d = new Date(x.getFullYear(), x.getMonth(), Math.min(goc, new Date(x.getFullYear(), x.getMonth()+1, 0).getDate())); }
+  };
+  buoc(); let an = 0; while (d < homNay && an++ < 400) buoc();
+  return ngayStr(d);
+}
+function hoanThanh(t){
+  t.trang_thai = "hoan_thanh"; t.ngay_hoan_thanh = ngayStr(new Date()) + " " + gioStr(new Date()); suaDoi(t);
+  if (t.lap_lai !== "khong" && t.han_ngay && !t.da_tao_ke_tiep) {
+    themMoi({...t, trang_thai: "chua_lam", han_ngay: hanKeTiep(t)});
+    t.da_tao_ke_tiep = true;
+  }
+}
+function moHop(t){
+  dangSua = t || null;
+  $("tieuDeHop").textContent = t ? "Sửa công việc" : "Thêm công việc";
+  const p = t || phanTich($("oNhap").value.split("\n")[0] || "");
+  $("fTen").value = p.ten || ""; $("fGhi").value = p.ghi_chu || ""; $("fNgay").value = p.han_ngay || "";
+  $("fGio").value = p.han_gio || ""; $("fUuTien").value = p.uu_tien || "thuong"; $("fLap").value = p.lap_lai || "khong";
+  $("fNguoi").value = p.nguoi_giao || ""; $("fTrangThai").value = p.trang_thai || "chua_lam";
+  $("hopViec").showModal();
+}
+$("formViec").addEventListener("submit", e => {
+  if (e.submitter && e.submitter.value !== "luu") return;
+  const g = {ten: $("fTen").value.trim(), ghi_chu: $("fGhi").value.trim(), han_ngay: $("fNgay").value, han_gio: $("fGio").value,
+    uu_tien: $("fUuTien").value, lap_lai: $("fLap").value, nguoi_giao: $("fNguoi").value.trim(), trang_thai: $("fTrangThai").value};
+  if (!g.ten) return;
+  if (dangSua) {
+    const truoc = dangSua.trang_thai;
+    Object.assign(dangSua, g);
+    if (g.trang_thai === "hoan_thanh" && truoc !== "hoan_thanh") { dangSua.trang_thai = truoc; hoanThanh(dangSua); }
+    if (g.trang_thai !== "hoan_thanh") dangSua.ngay_hoan_thanh = "";
+    suaDoi(dangSua);
+  } else { themMoi(g); $("oNhap").value = ""; xemTruoc(); }
+  daThayDoi();
+});
+function themTuONhap(){
+  const dong = $("oNhap").value.split("\n").map(x => x.trim()).filter(Boolean);
+  if (!dong.length) return;
+  dong.forEach(d => themMoi(phanTich(d)));
+  $("oNhap").value = ""; xemTruoc(); loc = "can_lam"; daThayDoi();
+}
+$("nutThem").onclick = themTuONhap;
+$("nutChiTiet").onclick = () => moHop(null);
+$("nutNoi").onclick = () => { window.scrollTo({top: 0, behavior: "smooth"}); setTimeout(() => $("oNhap").focus(), 300); };
+$("oNhap").addEventListener("input", xemTruoc);
+$("oNhap").addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); themTuONhap(); } });
+$("oTim").addEventListener("input", e => { timKiem = e.target.value.trim(); veLai(); });
+$("theSo").addEventListener("click", e => { const o = e.target.closest(".so"); if (o) { loc = o.dataset.loc; veLai(); } });
+$("danhSach").addEventListener("click", e => {
+  const b = e.target.closest("button[data-hd]"); if (!b) return;
+  const t = ds.find(x => x.id === b.closest(".viec").dataset.id); if (!t) return;
+  const hd = b.dataset.hd;
+  if (hd === "bat_dau") { t.trang_thai = "dang_lam"; suaDoi(t); }
+  else if (hd === "xong") hoanThanh(t);
+  else if (hd === "ve_chua") { t.trang_thai = "chua_lam"; suaDoi(t); }
+  else if (hd === "lam_lai") { t.trang_thai = "chua_lam"; t.ngay_hoan_thanh = ""; suaDoi(t); }
+  else if (hd === "sua") return moHop(t);
+  else if (hd === "xoa") { if (!confirm(`Xóa việc "${t.ten}"?`)) return; t.da_xoa = true; suaDoi(t); }
+  daThayDoi();
+});
+
+/* ================= LƯU TRỮ GITHUB ================= */
+function trangThai(chu, loi){ const e = $("tt"); e.textContent = chu; e.className = "tt" + (loi ? " loi" : ""); }
+function daThayDoi(){
+  ghi(KHOA_DL, {cong_viec: ds}); veLai();
+  if (!daKetNoi()) { trangThai("Đã lưu trên máy này"); return; }
+  trangThai("Chờ lưu…"); clearTimeout(henLuu); henLuu = setTimeout(dayLen, 1200);
+}
+function maHoa(chuoi){ const b = new TextEncoder().encode(chuoi); let s = ""; for (let i = 0; i < b.length; i += 8192) s += String.fromCharCode.apply(null, b.subarray(i, i+8192)); return btoa(s); }
+function giaiMa(b64){ const s = atob(b64.replace(/\s/g,"")); const b = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) b[i] = s.charCodeAt(i); return new TextDecoder().decode(b); }
+async function goiGH(duong, tuyChon = {}){
+  return fetch(`https://api.github.com/repos/${encodeURIComponent(cfg.chu)}/${encodeURIComponent(cfg.kho)}${duong}`, {
+    cache: "no-store", ...tuyChon,
+    headers: {"Authorization": "Bearer " + cfg.ma, "Accept": "application/vnd.github+json", ...(tuyChon.body ? {"Content-Type": "application/json"} : {})}
+  });
+}
+function gop(a, b){
+  const m = new Map(b.map(t => [t.id, t]));
+  for (const t of a) { const x = m.get(t.id); if (!x || (t.sua_luc||0) > (x.sua_luc||0)) m.set(t.id, t); }
+  return [...m.values()];
+}
+async function keoVe(){
+  const r = await goiGH("/contents/" + DUONG);
+  if (r.status === 404) { sha = null; return true; }
+  if (!r.ok) throw new Error(await moTaLoi(r));
+  const j = await r.json(); sha = j.sha;
+  const xa = (JSON.parse(giaiMa(j.content || "")) || {}).cong_viec || [];
+  const mx = new Map(xa.map(t => [t.id, t.sua_luc||0]));
+  const canDay = ds.some(t => !mx.has(t.id) || (t.sua_luc||0) > mx.get(t.id));
+  ds = gop(ds, xa); ghi(KHOA_DL, {cong_viec: ds});
+  return canDay;
+}
+async function moTaLoi(r){
+  if (r.status === 401) return "Mã truy cập sai hoặc đã hết hạn";
+  if (r.status === 403) return "Mã truy cập không đủ quyền (cần quyền Contents và Actions: đọc và ghi)";
+  if (r.status === 404) return "Không thấy kho — kiểm tra tên tài khoản, tên kho, hoặc mã chưa được cấp quyền cho kho này";
+  let t = ""; try { t = (await r.json()).message; } catch(e){}
+  return `Lỗi ${r.status} ${t}`;
+}
+async function dayLen(lanThu = 0){
+  if (!daKetNoi()) return;
+  if (dangLuu) { luuLai = true; return; }
+  dangLuu = true; trangThai("Đang lưu lên GitHub…");
+  try {
+    const muoiNgay = Date.now() - 30*864e5;
+    const luu = ds.filter(t => !(t.da_xoa && (t.sua_luc||0) < muoiNgay))
+                  .sort((a,b) => (a.ngay_tao||"").localeCompare(b.ngay_tao||""));
+    const r = await goiGH("/contents/" + DUONG, {method: "PUT", body: JSON.stringify({
+      message: "Cập nhật công việc " + gioStr(new Date()) + " " + ngayStr(new Date()),
+      content: maHoa(JSON.stringify({cong_viec: luu, cap_nhat: new Date().toISOString()}, null, 1)),
+      ...(sha ? {sha} : {})})});
+    if ((r.status === 409 || r.status === 422) && lanThu < 2) { dangLuu = false; await keoVe(); veLai(); return dayLen(lanThu + 1); }
+    if (!r.ok) throw new Error(await moTaLoi(r));
+    sha = (await r.json()).content.sha; ds = luu;
+    trangThai("Đã lưu lên GitHub lúc " + gioStr(new Date()));
+  } catch (e) { trangThai("Chưa lưu được: " + e.message + " — sẽ thử lại", true); setTimeout(() => dayLen(), 30000); }
+  finally { dangLuu = false; if (luuLai) { luuLai = false; dayLen(); } }
+}
+async function dongBo(){
+  if (!daKetNoi() || dangLuu || henLuu && trangThaiDangCho()) return;
+  try { const canDay = await keoVe(); veLai(); if (canDay) dayLen(); else trangThai("Đã đồng bộ lúc " + gioStr(new Date())); }
+  catch (e) { trangThai("Không tải được dữ liệu: " + e.message, true); }
+}
+function trangThaiDangCho(){ return $("tt").textContent.startsWith("Chờ lưu"); }
+
+/* ================= CÀI ĐẶT VÀ GỬI THỬ ================= */
+$("nutCaiDat").onclick = () => { $("cChu").value = cfg.chu || "Kingtip518"; $("cKho").value = cfg.kho || "NhacViec-DuLieu"; $("cMa").value = cfg.ma || ""; $("cKetQua").textContent = ""; $("hopCaiDat").showModal(); };
+$("formCaiDat").addEventListener("submit", async e => {
+  const v = e.submitter && e.submitter.value;
+  if (v === "huy") return;
+  if (v === "ngat") { if (confirm("Ngắt kết nối trên máy này? Dữ liệu trên GitHub vẫn còn nguyên.")) { cfg = {}; ghi(KHOA_CH, cfg); sha = null; veLai(); trangThai(""); } return; }
+  e.preventDefault();
+  const moi = {chu: $("cChu").value.trim(), kho: $("cKho").value.trim(), ma: $("cMa").value.trim()};
+  if (!moi.chu || !moi.kho || !moi.ma) { $("cKetQua").textContent = "Điền đủ 3 ô."; return; }
+  const cu = cfg; cfg = moi; $("cKetQua").textContent = "Đang kiểm tra…";
+  try {
+    const r = await goiGH(""); if (!r.ok) throw new Error(await moTaLoi(r));
+    const j = await r.json();
+    if (!j.private && !confirm("Chú ý: kho này đang để CÔNG KHAI, ai cũng xem được danh sách công việc. Vẫn dùng?")) { cfg = cu; return; }
+    ghi(KHOA_CH, cfg); $("hopCaiDat").close();
+    await dongBo();
+  } catch (err) { cfg = cu; $("cKetQua").textContent = "❌ " + err.message; }
+});
+$("nutGui").onclick = async () => {
+  if (!daKetNoi()) { alert("Cần kết nối GitHub trước (⚙ Cài đặt). Bản tin Telegram được gửi từ kho dữ liệu."); return; }
+  clearTimeout(henLuu); await dayLen();
+  trangThai("Đang yêu cầu gửi Telegram…");
+  const r = await goiGH(`/actions/workflows/${TEN_LICH}/dispatches`, {method: "POST", body: JSON.stringify({ref: "main"})});
+  if (r.status === 204) trangThai("Đã yêu cầu gửi — tin nhắn tới Telegram sau khoảng 30 giây – 1 phút");
+  else trangThai("Không gửi được: " + await moTaLoi(r), true);
+};
+
+veLai(); xemTruoc();
+if (daKetNoi()) dongBo(); else trangThai("Chạy thử trên máy này");
+setInterval(() => { if (!document.hidden) { dongBo(); } veLai(); }, 120000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) dongBo(); });
+</script>
+</body>
+</html>
