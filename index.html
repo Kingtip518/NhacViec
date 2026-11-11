@@ -148,6 +148,9 @@ dialog h2{margin:0 0 14px;font-size:19px}
 .ng.sua{border-style:dashed;color:var(--mo)}
 .loi-nhap{color:var(--do);font-size:13.5px;margin-top:6px;font-weight:500}
 .loi-nhap:empty{display:none}
+.da-sua{font-size:12.5px;color:var(--mo);padding:0 0 4px}
+.da-sua s{color:var(--do);text-decoration:line-through}
+.da-sua b{color:var(--la);font-weight:600}
 .dong-xem .ng-xem{color:var(--lam);font-size:13px;white-space:nowrap}
 .dong-xem .thieu{color:var(--do);font-size:13px;white-space:nowrap;font-weight:600}
 .the-ng{color:var(--lam);font-weight:600}
@@ -180,6 +183,8 @@ dialog h2{margin:0 0 14px;font-size:19px}
   .ng{padding:7px 13px}
   .loc-nguoi{font-size:16px}
   .hang-nhap .nut-them{flex:1;padding:10px 12px}
+  .dong-xem{flex-wrap:wrap;gap:2px 10px}
+  .dong-xem .ten{flex:1 1 100%}
   .nut-cong-cu{padding:9px 10px}
   .han-ben .gio{font-size:17px}
   .nut-noi{display:block}
@@ -379,6 +384,97 @@ function tachNguoi(chuoi){
   return {con: s, nguoi: thay};
 }
 
+/* ================= TỰ SỬA CHÍNH TẢ VÀ VIẾT HOA ================= */
+// Bảng lỗi gõ hay gặp: [chữ gõ sai, chữ đúng]. Chỉ đưa vào những chữ sai không trùng với từ có nghĩa khác.
+const LOI_GO = [
+  ["báo cao","báo cáo"],["bao cáo","báo cáo"],["báo các","báo cáo"],["bá cáo","báo cáo"],["bao cao","báo cáo"],
+  ["kê hoạch","kế hoạch"],["kế hoach","kế hoạch"],["ké hoạch","kế hoạch"],["kế họach","kế hoạch"],["ke hoach","kế hoạch"],["kế hoặch","kế hoạch"],
+  ["huân luyện","huấn luyện"],["huấn luyên","huấn luyện"],["huấn luyệ","huấn luyện"],["huan luyen","huấn luyện"],
+  ["tuyên quân","tuyển quân"],["tuyễn quân","tuyển quân"],["tuyển quan","tuyển quân"],
+  ["quân sụ","quân sự"],["quan sự","quân sự"],["dân quan","dân quân"],["dân quâm","dân quân"],["tự vê","tự vệ"],
+  ["chỉ hủy","chỉ huy"],["chi huy","chỉ huy"],["chỉ huy trưỡng","chỉ huy trưởng"],
+  ["diễn tâp","diễn tập"],["diển tập","diễn tập"],["diễn tậpp","diễn tập"],
+  ["phòng thũ","phòng thủ"],["phòng thụ","phòng thủ"],["thiên tại","thiên tai"],["cứu nan","cứu nạn"],["cứu hô","cứu hộ"],
+  ["hồ xơ","hồ sơ"],["hô sơ","hồ sơ"],["hội nghi","hội nghị"],["hôi nghị","hội nghị"],
+  ["kiễm tra","kiểm tra"],["kiểm trả","kiểm tra"],["kiêm tra","kiểm tra"],["kiểm tr","kiểm tra"],["kiem tra","kiểm tra"],
+  ["tông kết","tổng kết"],["tổng kêt","tổng kết"],["sơ kêt","sơ kết"],["xây dưng","xây dựng"],["xây dựn","xây dựng"],
+  ["triễn khai","triển khai"],["triển khia","triển khai"],["triên khai","triển khai"],
+  ["chuẩn bi","chuẩn bị"],["chuẫn bị","chuẩn bị"],["chuân bị","chuẩn bị"],["chuan bi","chuẩn bị"],
+  ["thực hiên","thực hiện"],["thưc hiện","thực hiện"],["thực hiẹn","thực hiện"],
+  ["tham mư","tham mưu"],["quyết đinh","quyết định"],["quyêt định","quyết định"],["quyết đính","quyết định"],
+  ["công vản","công văn"],["công vằn","công văn"],["cong văn","công văn"],["tờ trinh","tờ trình"],
+  ["đề nghi","đề nghị"],["đề nghỉ","đề nghị"],["danh sach","danh sách"],["dang sách","danh sách"],["danh sách sách","danh sách"],
+  ["nghĩa vu","nghĩa vụ"],["nghỉa vụ","nghĩa vụ"],["khám tuyễn","khám tuyển"],["gia đinh","gia đình"],
+  ["uy ban","ủy ban"],["nhân dâm","nhân dân"],["đãng ủy","đảng ủy"],["chi bô","chi bộ"],
+  ["thông bao","thông báo"],["thong báo","thông báo"],["thời gain","thời gian"],["địa điễm","địa điểm"],
+  ["vủ khí","vũ khí"],["trang bi","trang bị"],["hậu cân","hậu cần"],["hâu cần","hậu cần"],
+  ["tài chinh","tài chính"],["quyết toan","quyết toán"],["dự toan","dự toán"],["mua săm","mua sắm"],
+  ["nhiệm vu","nhiệm vụ"],["nhiêm vụ","nhiệm vụ"],["trưc ban","trực ban"],["sẳn sàng","sẵn sàng"],["săn sàng","sẵn sàng"],
+  ["chiến đâu","chiến đấu"],["phối hơp","phối hợp"],["phối họp","phối hợp"],["hướng dẩn","hướng dẫn"],["hưóng dẫn","hướng dẫn"],
+  ["tổng hơp","tổng hợp"],["tổng họp","tổng hợp"],["cập nhât","cập nhật"],["cập nhập","cập nhật"],["cạp nhật","cập nhật"],
+  ["xát minh","xác minh"],["sát nhập","sáp nhập"],["đột suất","đột xuất"],["sử lý","xử lý"],["xử lí","xử lý"],["xủ lý","xử lý"],
+  ["xử dụng","sử dụng"],["dải quyết","giải quyết"],["chao đổi","trao đổi"],["chanh thủ","tranh thủ"],["kiễm điểm","kiểm điểm"],
+  ["cở quan","cơ quan"],["đãm bảo","đảm bảo"],["bổ xung","bổ sung"],["bỗ sung","bổ sung"],["lý lich","lý lịch"],
+  ["thăm hõi","thăm hỏi"],["dấy tờ","giấy tờ"],["phê duyêt","phê duyệt"],["giao bang","giao ban"],
+  ["tuần tra","tuần tra"],["tuân tra","tuần tra"],["canh gát","canh gác"],["canh gắc","canh gác"],
+  ["văn bảng","văn bản"],["vản bản","văn bản"],["biên bảng","biên bản"],["biên bàn","biên bản"],
+  ["tập huân","tập huấn"],["tạp huấn","tập huấn"],["bồi dưởng","bồi dưỡng"],["bồi dưỡn","bồi dưỡng"],
+  ["giáo dục quốc phòng","giáo dục quốc phòng"],["quốc phong","quốc phòng"],["an nin","an ninh"],
+  ["chấn chỉnh","chấn chỉnh"],["trấn chỉnh","chấn chỉnh"],["chẩn bị","chuẩn bị"],["sắp sếp","sắp xếp"],["xắp xếp","sắp xếp"],
+  ["dặn dò","dặn dò"],["giặn dò","dặn dò"],["rà xoát","rà soát"],["già soát","rà soát"],["ra soát","rà soát"],
+  ["thông nhất","thống nhất"],["thống nhât","thống nhất"],["xã thông nhất","xã Thống Nhất"],["hoàn thanh","hoàn thành"],["hoàng thành","hoàn thành"],["thành lâp","thành lập"]
+];
+// Tên riêng viết hoa đúng (gõ thường cũng được web tự sửa).
+const TEN_RIENG = [
+  ["xã thống nhất","xã Thống Nhất"],["quảng ninh","Quảng Ninh"],["hạ long","Hạ Long"],["bãi cháy","Bãi Cháy"],
+  ["đông triều","Đông Triều"],["uông bí","Uông Bí"],["cẩm phả","Cẩm Phả"],["mạo khê","Mạo Khê"],["việt hưng","Việt Hưng"],
+  ["hải phòng","Hải Phòng"],["hà nội","Hà Nội"],["việt nam","Việt Nam"],["quân khu 3","Quân khu 3"],
+  ["ban chỉ huy quân sự","Ban Chỉ huy quân sự"],["bộ chỉ huy quân sự","Bộ Chỉ huy quân sự"],["bộ quốc phòng","Bộ Quốc phòng"],
+  ["ủy ban nhân dân","Ủy ban nhân dân"],["uỷ ban nhân dân","Ủy ban nhân dân"],["hội đồng nhân dân","Hội đồng nhân dân"],
+  ["mặt trận tổ quốc","Mặt trận Tổ quốc"],["đảng ủy","Đảng ủy"],["đảng uỷ","Đảng ủy"],["chính phủ","Chính phủ"],["quốc hội","Quốc hội"],
+  ["đoàn thanh niên","Đoàn Thanh niên"],["hội phụ nữ","Hội Phụ nữ"],["hội cựu chiến binh","Hội Cựu chiến binh"],["tết","Tết"]
+];
+// Chữ viết tắt luôn viết hoa.
+const VIET_TAT = ["chqs","bchqs","ubnd","hđnd","mttq","dqtv","dqtt","tkcn","pctt","pccc","pccn","nvqs","gdqp","lttp","sscđ","ccb","qk3","bch","đtn","hlv","ktqs","qncn","cnqp","hđnvqs","gdqp-an","ptcs"];
+const LAP_SAI = ["các","và","của","cho","để","về","với","là","có","tại","trong","theo","đã","những","được","một","này","báo","việc"];
+
+const BIEN_TRUOC = "(^|[\\s,.;:!?()\"'\\-/])", BIEN_SAU = "(?=$|[\\s,.;:!?()\"'\\-/])";
+const QUY_TAC = [...LOI_GO, ...TEN_RIENG].sort((a, b) => b[0].length - a[0].length)
+  .map(([sai, dung]) => [new RegExp(BIEN_TRUOC + thoatRe(sai) + BIEN_SAU, "giu"), sai, dung]);
+const RE_VIET_TAT = new RegExp(BIEN_TRUOC + "(" + VIET_TAT.map(thoatRe).join("|") + ")" + BIEN_SAU, "giu");
+const RE_LAP = new RegExp(BIEN_TRUOC + "(" + LAP_SAI.join("|") + ")\\s+\\2" + BIEN_SAU, "giu");
+
+function chuanHoa(chu){
+  if (!chu) return {chu: "", da_sua: []};
+  const goc = chu, daSua = [];
+  let s = chu.replace(/\s+/g, " ").trim();
+  // dấu câu: bỏ cách trước dấu, thêm cách sau dấu phẩy/chấm phẩy khi liền chữ
+  s = s.replace(/\s+([,.;:!?])/g, "$1").replace(/([,;])(?=[^\s\d])/g, "$1 ").replace(/([.!?])(?=[A-Za-zÀ-ỹĐđ])/g, "$1 ");
+  for (const [re, sai, dung] of QUY_TAC) {
+    re.lastIndex = 0;
+    s = s.replace(re, (tat, truoc) => {
+      const goTay = tat.slice(truoc.length);
+      if (goTay === dung) return tat;
+      // giữ chữ hoa đầu nếu người gõ viết hoa và chữ đúng không phải tên riêng
+      let moi = dung;
+      if (goTay[0] !== goTay[0].toLowerCase() && moi[0] === moi[0].toLowerCase()) moi = moi[0].toUpperCase() + moi.slice(1);
+      if (goTay !== moi) daSua.push([goTay, moi]);
+      return truoc + moi;
+    });
+  }
+  s = s.replace(RE_VIET_TAT, (tat, truoc, chuTat) => {
+    const hoa = chuTat.toUpperCase();
+    if (chuTat !== hoa) daSua.push([chuTat, hoa]);
+    return truoc + hoa;
+  });
+  s = s.replace(RE_LAP, (tat, truoc, tu) => { daSua.push([tat.slice(truoc.length), tu]); return truoc + tu; });
+  // viết hoa chữ đầu câu và sau dấu chấm, chấm hỏi, chấm than
+  s = s.replace(/(^|[.!?]\s+)([a-zà-ỹđ])/gu, (tat, truoc, c) => truoc + c.toUpperCase());
+  const thap = goc.toLowerCase();
+  daSua.sort((a, b) => thap.indexOf(a[0].toLowerCase()) - thap.indexOf(b[0].toLowerCase()));
+  return {chu: s, da_sua: daSua, khac: s !== goc};
+}
+
 /* ================= ĐỌC HẠN CHÓT VIẾT BẰNG LỜI ================= */
 const SO_THU = {"2":1,"3":2,"4":3,"5":4,"6":5,"7":6,"hai":1,"ba":2,"tư":3,"năm":4,"sáu":5,"bảy":6};
 function phanTich(dong){
@@ -436,6 +532,7 @@ function phanTich(dong){
   let ten = s.replace(/\s+/g," ").trim().replace(/[,;]\s*$/,"");
   for (let i = 0; i < 3; i++) ten = ten.replace(/\s*(?:trước|lúc|vào|hạn chót|hạn|chậm nhất)\s*$/iu, "").trim();
   kq.ten = ten.replace(/^[-–•*\d.)\s]+(?=\S)/u, "").trim() || tn.con || dong.trim();
+  const ch = chuanHoa(kq.ten); kq.ten = ch.chu; kq.da_sua = ch.da_sua;
   kq.ten = kq.ten.charAt(0).toUpperCase() + kq.ten.slice(1);
   return kq;
 }
@@ -597,7 +694,8 @@ function xemTruoc(){
     if (p.lap_lai !== "khong") han += ", " + TEN_LAP[p.lap_lai].toLowerCase();
     const ng = p.nguoi_thuc_hien.length ? p.nguoi_thuc_hien : nguoiChon;
     const ngHtml = ng.length ? `<span class="ng-xem">👥 ${esc(ng.join(", "))}</span>` : `<span class="thieu">Chưa chọn người</span>`;
-    return `<div class="dong-xem"><span class="ten">${esc(p.ten)}</span>${p.uu_tien==="gap"?'<span class="gap">GẤP</span>':""}${ngHtml}<span class="han">${esc(han)}</span></div>`;
+    const sua = p.da_sua && p.da_sua.length ? `<div class="da-sua">✎ Đã tự sửa: ${p.da_sua.map(([a,b]) => `<s>${esc(a)}</s> → <b>${esc(b)}</b>`).join(", ")}</div>` : "";
+    return `<div class="dong-xem"><span class="ten">${esc(p.ten)}</span>${p.uu_tien==="gap"?'<span class="gap">GẤP</span>':""}${ngHtml}<span class="han">${esc(han)}</span></div>${sua}`;
   }).join("");
   if (!dong.length) $("loiNhap").textContent = "";
 }
@@ -665,8 +763,8 @@ $("formViec").addEventListener("submit", async e => {
   }
   if (v && v !== "luu") return;
   if (!chonTrongHop.length) { e.preventDefault(); $("fLoiNguoi").textContent = "Chọn ít nhất một người thực hiện."; return; }
-  const g = {nguoi_thuc_hien: chonTrongHop.slice(), ten: $("fTen").value.trim(), ghi_chu: $("fGhi").value.trim(), han_ngay: $("fNgay").value, han_gio: $("fGio").value,
-    uu_tien: $("fUuTien").value, lap_lai: $("fLap").value, nguoi_giao: $("fNguoi").value.trim(), trang_thai: $("fTrangThai").value};
+  const g = {nguoi_thuc_hien: chonTrongHop.slice(), ten: chuanHoa($("fTen").value).chu, ghi_chu: chuanHoa($("fGhi").value).chu, han_ngay: $("fNgay").value, han_gio: $("fGio").value,
+    uu_tien: $("fUuTien").value, lap_lai: $("fLap").value, nguoi_giao: chuanHoa($("fNguoi").value).chu, trang_thai: $("fTrangThai").value};
   if (!g.ten) return;
   if (dangSua) {
     const truoc = dangSua.trang_thai;
