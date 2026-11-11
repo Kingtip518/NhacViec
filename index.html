@@ -129,6 +129,26 @@ dialog h2{margin:0 0 14px;font-size:19px}
 .ghi-chu-nho{font-size:13px;color:var(--mo);margin:0 0 14px}
 .ket-qua{font-size:13.5px;min-height:20px;margin-bottom:6px}
 
+.hang-nguoi{display:flex;align-items:center;gap:8px;border-top:1px solid var(--ke);margin-top:8px;padding-top:10px}
+.nhan-nguoi{font-size:13px;color:var(--mo);flex:none}
+.ds-nguoi{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.ng{border:1px solid var(--ke);background:var(--giay);border-radius:999px;padding:5px 12px;font-size:13.5px;color:var(--chu)}
+.ng.chon{background:var(--reu);border-color:var(--reu);color:#fff}
+.ng.sua{border-style:dashed;color:var(--mo)}
+.loi-nhap{color:var(--do);font-size:13.5px;margin-top:6px;font-weight:500}
+.loi-nhap:empty{display:none}
+.dong-xem .ng-xem{color:var(--lam);font-size:13px;white-space:nowrap}
+.dong-xem .thieu{color:var(--do);font-size:13px;white-space:nowrap;font-weight:600}
+.the-ng{color:var(--lam);font-weight:600}
+.the-thieu{color:#a87a1c;background:var(--vang-nhat);border-radius:6px;padding:0 6px;font-weight:600}
+.hang-loc{display:flex;gap:8px;margin:6px 0 4px}
+.hang-loc .tim{margin:0;flex:1}
+.loc-nguoi{flex:0 0 40%;min-width:0;width:40%;background:var(--giay);border:1px solid var(--ke);border-radius:12px;padding:10px 8px;font-size:15px}
+.hang-loc .tim{min-width:0}
+.loc-nguoi.dang-loc{border-color:var(--reu);color:var(--reu);font-weight:600}
+.dong-ng{display:flex;gap:8px;margin-bottom:8px}
+.dong-ng input{flex:1;background:var(--nen);border:1px solid transparent;border-radius:10px;padding:10px 12px;font-size:15px;outline:none}
+.dong-ng input:focus{border-color:var(--reu-sang);background:var(--giay)}
 .hop-xn{width:min(420px,calc(100vw - 32px))}
 .hop-xn .noi{background:var(--nen);border-radius:12px;padding:12px 14px;margin:0 0 16px;font-weight:600;word-break:break-word}
 .hop-xn .them{font-size:13.5px;color:var(--mo);margin:-8px 0 16px}
@@ -140,6 +160,10 @@ dialog h2{margin:0 0 14px;font-size:19px}
   .nut-dau .chu-dai{display:none}
   .than{padding:0 12px 110px}
   .goi-y{display:none}
+  .hang-nguoi{align-items:flex-start}
+  .nhan-nguoi{padding-top:7px}
+  .ng{padding:7px 13px}
+  .loc-nguoi{font-size:16px}
   .hang-nhap{justify-content:flex-end}
   .nut-them{flex:1;padding:12px}
   .han-ben .gio{font-size:17px}
@@ -174,6 +198,8 @@ dialog h2{margin:0 0 14px;font-size:19px}
   <div class="o-nhap">
     <textarea id="oNhap" rows="2" placeholder="Hôm nay có việc gì? Ví dụ: Nộp báo cáo quân số 16h thứ 6 gấp"></textarea>
     <div id="xemTruoc" class="xem-truoc"></div>
+    <div class="hang-nguoi"><span class="nhan-nguoi">Giao cho</span><div id="chonNguoi" class="ds-nguoi"></div></div>
+    <div id="loiNhap" class="loi-nhap"></div>
     <div class="hang-nhap">
       <span class="goi-y">Ghi hạn bằng lời: <i>16h thứ 6</i> <i>ngày mai</i> <i>15/11</i> <i>gấp</i> <i>hàng tuần</i></span>
       <button class="nut-chi-tiet" id="nutChiTiet">Nhập chi tiết</button>
@@ -184,7 +210,10 @@ dialog h2{margin:0 0 14px;font-size:19px}
   <div id="baoThu" class="bao-thu" hidden>Đang dùng thử: việc chỉ lưu trên máy này, máy khác chưa xem được. Bấm <b>⚙ Cài đặt</b> để kết nối, các việc đã nhập vẫn được giữ.</div>
 
   <nav class="loc" id="theSo"></nav>
-  <input class="tim" id="oTim" type="search" placeholder="Tìm theo tên việc, ghi chú, người giao">
+  <div class="hang-loc">
+    <input class="tim" id="oTim" type="search" placeholder="Tìm theo tên việc, ghi chú, người">
+    <select class="loc-nguoi" id="locNguoi" title="Xem việc của từng người"></select>
+  </div>
   <section id="danhSach"></section>
 </main>
 <button class="nut-noi" id="nutNoi" title="Thêm việc mới">+</button>
@@ -197,6 +226,11 @@ dialog h2{margin:0 0 14px;font-size:19px}
     <div class="hai">
       <div class="truong"><label for="fNgay">Hạn chót – ngày</label><input id="fNgay" type="date"></div>
       <div class="truong"><label for="fGio">Hạn chót – giờ (bỏ trống là hết ngày)</label><input id="fGio" type="time"></div>
+    </div>
+    <div class="truong"><label>Người thực hiện (bắt buộc, chọn một hoặc nhiều người)</label>
+      <div id="fChonNguoi" class="ds-nguoi" style="flex-wrap:wrap"></div>
+      <div class="dong-ng" style="margin:8px 0 0"><input id="fThemNguoi" placeholder="Người ngoài danh sách: gõ tên rồi bấm Thêm"><button type="button" class="nut-phu" id="fNutThemNguoi">Thêm</button></div>
+      <div id="fLoiNguoi" class="loi-nhap"></div>
     </div>
     <div class="hai">
       <div class="truong"><label for="fUuTien">Mức độ</label><select id="fUuTien"><option value="thuong">Thường</option><option value="gap">Gấp</option></select></div>
@@ -227,6 +261,21 @@ dialog h2{margin:0 0 14px;font-size:19px}
   </form>
 </dialog>
 
+<dialog id="hopNguoi">
+  <form method="dialog" id="formNguoi">
+    <h2>Danh sách người thực hiện</h2>
+    <p class="ghi-chu-nho">Sửa thẳng vào ô để đổi tên; các việc đã giao cho người đó cũng được đổi theo. Danh sách dùng chung cho mọi máy.</p>
+    <div id="dsSuaNguoi"></div>
+    <div class="dong-ng"><input id="nguoiMoi" placeholder="Tên người mới"><button type="button" class="nut-phu" id="nutThemNguoiMoi">Thêm người</button></div>
+    <div id="loiNguoi" class="loi-nhap"></div>
+    <div class="chan-hop">
+      <span class="day"></span>
+      <button class="nut-phu" value="huy" formnovalidate>Đóng</button>
+      <button class="nut-them" value="luu">Lưu danh sách</button>
+    </div>
+  </form>
+</dialog>
+
 <dialog id="hopCaiDat">
   <form method="dialog" id="formCaiDat">
     <h2>Kết nối lưu trữ</h2>
@@ -235,6 +284,7 @@ dialog h2{margin:0 0 14px;font-size:19px}
     <div class="truong"><label for="cKho">Tên kho dữ liệu</label><input id="cKho" placeholder="NhacViec-DuLieu"></div>
     <div class="truong"><label for="cMa">Mã truy cập (bắt đầu bằng github_pat_)</label><input id="cMa" type="password" autocomplete="off"></div>
     <div id="cKetQua" class="ket-qua"></div>
+    <p class="ghi-chu-nho" style="margin-top:0"><button type="button" class="nut-chi-tiet" id="nutMoDsNguoi" style="padding:0">Sửa danh sách người thực hiện</button></p>
     <div class="chan-hop">
       <button class="nut-xoa" value="ngat" id="nutNgat" formnovalidate>Ngắt kết nối</button>
       <span class="day"></span>
@@ -251,8 +301,13 @@ const THU = ["Chủ nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Th�
 const TEN_LAP = {ngay:"Lặp hàng ngày", tuan:"Lặp hàng tuần", thang:"Lặp hàng tháng"};
 const $ = id => document.getElementById(id);
 
+const NGUOI_MAC_DINH = ["Hùng","Chi","Tú","Nam Anh","Nam Em","Vương","Thành","Hiếu"];
+const KHOA_CHON = "nhacviec_nguoi_chon";
 let cfg = doc(KHOA_CH) || {};
 let ds = (doc(KHOA_DL) || {}).cong_viec || [];
+let dsNguoi = (doc(KHOA_DL) || {}).nguoi || {ds: NGUOI_MAC_DINH.slice(), sua_luc: 0};
+let nguoiChon = doc(KHOA_CHON) || ["Tú"];
+let locNguoi = "", chonTrongHop = [], banSuaNguoi = [];
 let sha = null, loc = "can_lam", timKiem = "", henLuu = null, dangLuu = false, luuLai = false, dangSua = null;
 
 function doc(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } }
@@ -266,11 +321,42 @@ const taoId = () => Date.now().toString(36) + Math.random().toString(36).slice(2
 function congNgay(d, n){ const x = new Date(d); x.setDate(x.getDate()+n); return x; }
 function tuNgayStr(s){ const [y,m,d] = s.split("-").map(Number); return new Date(y, m-1, d); }
 
+/* ================= ĐỌC TÊN NGƯỜI THỰC HIỆN TRONG CÂU ================= */
+// Tên phải viết hoa chữ đầu như tên người; bỏ qua các cụm như "Thành phố", "Chi bộ".
+const KHONG_PHAI_TEN = {
+  "Thành": /^\s*(phố|viên|lập|công|tích|ủy|uỷ|tựu|phần|quả|thạo|thật|tâm)/iu,
+  "Chi": /^\s*(bộ|ủy|uỷ|hội|đoàn|cục|nhánh|phí|tiết|tiêu|trả|đội|khu)/iu,
+  "Hiếu": /^\s*(học|thảo)/iu
+};
+const thoatRe = x => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+function tachNguoi(chuoi){
+  let s = " " + chuoi + " ";
+  const thay = [];
+  const ten = [...dsNguoi.ds].sort((a, b) => b.length - a.length);
+  for (const n of ten) {
+    const re = new RegExp("([\\s,;(:\\-])" + thoatRe(n) + "(?=[\\s,;.:)\\-])", "gu");
+    s = s.replace(re, (tat, truoc, viTri, goc) => {
+      const sau = goc.slice(viTri + tat.length);
+      const loai = KHONG_PHAI_TEN[n];
+      if (loai && loai.test(sau)) return tat;
+      if (!thay.includes(n)) thay.push(n);
+      return truoc + "\u0001";
+    });
+  }
+  if (!thay.length) return {con: chuoi, nguoi: []};
+  s = s.replace(/\u0001(\s*(?:,|và|cùng|với|\+|&)\s*\u0001)+/gu, "\u0001");
+  s = s.replace(/(^|\s)(?:giao\s+(?:cho\s+)?|đ\/c\s*|đồng chí\s+|[Gg]iao\s+(?:cho\s+)?)+\u0001/gu, "$1\u0001");
+  s = s.replace(/\u0001\s*[:\-–]\s*/gu, " ").replace(/\s*[:\-–]\s*\u0001/gu, " ").replace(/\u0001/g, " ");
+  s = s.replace(/\s+/g, " ").trim().replace(/^[,;:\-–\s]+|[,;:\-–\s]+$/g, "");
+  return {con: s, nguoi: thay};
+}
+
 /* ================= ĐỌC HẠN CHÓT VIẾT BẰNG LỜI ================= */
 const SO_THU = {"2":1,"3":2,"4":3,"5":4,"6":5,"7":6,"hai":1,"ba":2,"tư":3,"năm":4,"sáu":5,"bảy":6};
 function phanTich(dong){
-  let s = " " + dong.trim().replace(/\s+/g," ") + " ";
-  const kq = {ten:"", han_ngay:"", han_gio:"", uu_tien:"thuong", lap_lai:"khong"};
+  const tn = tachNguoi(dong.trim().replace(/\s+/g," "));
+  let s = " " + tn.con + " ";
+  const kq = {ten:"", han_ngay:"", han_gio:"", uu_tien:"thuong", lap_lai:"khong", nguoi_thuc_hien: tn.nguoi};
   const CUOI = "(?=[\\s,.;])";
   const bo = re => { const m = s.match(re); if (m) s = s.replace(re, " "); return m; };
   const homNay = new Date(); homNay.setHours(0,0,0,0);
@@ -321,7 +407,8 @@ function phanTich(dong){
 
   let ten = s.replace(/\s+/g," ").trim().replace(/[,;]\s*$/,"");
   for (let i = 0; i < 3; i++) ten = ten.replace(/\s*(?:trước|lúc|vào|hạn chót|hạn|chậm nhất)\s*$/iu, "").trim();
-  kq.ten = ten.replace(/^[-–•*\d.)\s]+(?=\S)/u, "").trim() || dong.trim();
+  kq.ten = ten.replace(/^[-–•*\d.)\s]+(?=\S)/u, "").trim() || tn.con || dong.trim();
+  kq.ten = kq.ten.charAt(0).toUpperCase() + kq.ten.slice(1);
   return kq;
 }
 
@@ -368,9 +455,10 @@ function veDau(dem, conLam){
   $("thuHomNay").textContent = THU[d.getDay()];
   $("ngayHomNay").textContent = `${d.getDate()} ${THANG[d.getMonth()]}, ${d.getFullYear()}`;
   let s;
-  if (!conLam) s = "Không còn việc nào tồn đọng.";
+  const cua = locNguoi ? `Việc của <b>${esc(locNguoi)}</b>: ` : "";
+  if (!conLam) s = cua + (cua ? "không còn việc nào tồn đọng." : "Không còn việc nào tồn đọng.");
   else {
-    s = `Còn <b>${conLam}</b> việc phải làm`;
+    s = cua + `${cua ? "còn" : "Còn"} <b>${conLam}</b> việc phải làm`;
     const them = [];
     if (dem.qua_han) them.push(`<b class="so-do">${dem.qua_han} việc quá hạn</b>`);
     if (dem.hom_nay) them.push(`<b>${dem.hom_nay}</b> việc đến hạn hôm nay`);
@@ -382,8 +470,23 @@ function veDau(dem, conLam){
     .filter(k => dem[k]).map(k => `<i style="flex:${dem[k]};background:${MAU[k]}" title="${NHAN_NHOM[k]}: ${dem[k]}"></i>`).join("") : "";
 }
 
+function tatCaNguoi(){
+  const tap = [...dsNguoi.ds];
+  ds.forEach(t => !t.da_xoa && (t.nguoi_thuc_hien || []).forEach(n => { if (!tap.includes(n)) tap.push(n); }));
+  return tap;
+}
+function veChonNguoi(){
+  nguoiChon = nguoiChon.filter(n => dsNguoi.ds.includes(n));
+  $("chonNguoi").innerHTML = dsNguoi.ds.map(n => `<button type="button" class="ng ${nguoiChon.includes(n)?"chon":""}" data-ten="${esc(n)}">${esc(n)}</button>`).join("")
+    + `<button type="button" class="ng sua" data-sua="1">+ Sửa danh sách</button>`;
+  const tap = tatCaNguoi();
+  if (locNguoi && !tap.includes(locNguoi)) locNguoi = "";
+  $("locNguoi").innerHTML = `<option value="">Tất cả mọi người</option>` + tap.map(n => `<option value="${esc(n)}" ${n===locNguoi?"selected":""}>${esc(n)}</option>`).join("");
+  $("locNguoi").classList.toggle("dang-loc", !!locNguoi);
+}
 function veLai(){
-  const con = ds.filter(t => !t.da_xoa);
+  veChonNguoi();
+  const con = ds.filter(t => !t.da_xoa && (!locNguoi || (t.nguoi_thuc_hien || []).includes(locNguoi)));
   const dem = {qua_han:0, hom_nay:0, dang_lam:0, chua_lam:0, hoan_thanh:0};
   con.forEach(t => dem[nhom(t)]++);
   const conLam = dem.qua_han + dem.hom_nay + dem.dang_lam + dem.chua_lam;
@@ -396,7 +499,7 @@ function veLai(){
     `<button class="chip ${loc===k?"chon":""}" data-loc="${k}"><span class="cham" style="background:${mau}"></span>${ten} <b>${so}</b></button>`).join("");
 
   const q = timKiem.toLowerCase();
-  const loc1 = con.filter(t => !q || [t.ten,t.ghi_chu,t.nguoi_giao].join(" ").toLowerCase().includes(q));
+  const loc1 = con.filter(t => !q || [t.ten,t.ghi_chu,t.nguoi_giao,(t.nguoi_thuc_hien||[]).join(" ")].join(" ").toLowerCase().includes(q));
   const sapXep = (a,b) => (hanMs(a) ?? 9e15) - (hanMs(b) ?? 9e15) || (b.uu_tien==="gap") - (a.uu_tien==="gap");
   const nhomHtml = (k, ds1) => `<h2 class="nhom"><span class="cham" style="background:${MAU[k]}"></span>${NHAN_NHOM[k]} <span class="so">${ds1.length}</span></h2>` + ds1.map(veViec).join("");
   let html = "";
@@ -423,7 +526,9 @@ function veViec(t){
   if (t.uu_tien === "gap" && n !== "hoan_thanh") ct.push(`<span class="the-gap">GẤP</span>`);
   if (t.trang_thai === "dang_lam" && n !== "dang_lam") ct.push(`<span class="the-dl">Đang làm</span>`);
   if (t.lap_lai && t.lap_lai !== "khong") ct.push(`<span>🔁 ${TEN_LAP[t.lap_lai]}</span>`);
-  if (t.nguoi_giao) ct.push(`<span>👤 ${esc(t.nguoi_giao)}</span>`);
+  const ng = t.nguoi_thuc_hien || [];
+  ct.unshift(ng.length ? `<span class="the-ng">👥 ${esc(ng.join(", "))}</span>` : `<span class="the-thieu">Chưa có người thực hiện, bấm Sửa</span>`);
+  if (t.nguoi_giao) ct.push(`<span>Giao: ${esc(t.nguoi_giao)}</span>`);
   if (t.trang_thai === "hoan_thanh" && t.ngay_hoan_thanh) {
     const [d, g] = t.ngay_hoan_thanh.split(" "); const x = tuNgayStr(d);
     ct.push(`<span>Xong lúc ${g||""} ngày ${pad(x.getDate())}/${pad(x.getMonth()+1)}</span>`);
@@ -460,8 +565,11 @@ function xemTruoc(){
     const p = phanTich(d);
     let han = p.han_ngay ? moTaHan(p) : "chưa có hạn";
     if (p.lap_lai !== "khong") han += ", " + TEN_LAP[p.lap_lai].toLowerCase();
-    return `<div class="dong-xem"><span class="ten">${esc(p.ten)}</span>${p.uu_tien==="gap"?'<span class="gap">GẤP</span>':""}<span class="han">${esc(han)}</span></div>`;
+    const ng = p.nguoi_thuc_hien.length ? p.nguoi_thuc_hien : nguoiChon;
+    const ngHtml = ng.length ? `<span class="ng-xem">👥 ${esc(ng.join(", "))}</span>` : `<span class="thieu">Chưa chọn người</span>`;
+    return `<div class="dong-xem"><span class="ten">${esc(p.ten)}</span>${p.uu_tien==="gap"?'<span class="gap">GẤP</span>':""}${ngHtml}<span class="han">${esc(han)}</span></div>`;
   }).join("");
+  if (!dong.length) $("loiNhap").textContent = "";
 }
 
 /* ================= HỘP XÁC NHẬN ================= */
@@ -482,6 +590,7 @@ function suaDoi(t){ t.sua_luc = Date.now(); }
 function themMoi(p){
   const t = {id: taoId(), ten: p.ten, ghi_chu: p.ghi_chu || "", han_ngay: p.han_ngay || "", han_gio: p.han_gio || "",
     uu_tien: p.uu_tien || "thuong", lap_lai: p.lap_lai || "khong", nguoi_giao: p.nguoi_giao || "",
+    nguoi_thuc_hien: [...(p.nguoi_thuc_hien || [])],
     trang_thai: p.trang_thai || "chua_lam", ngay_tao: ngayStr(new Date()) + " " + gioStr(new Date()), ngay_hoan_thanh: ""};
   if (t.trang_thai === "hoan_thanh") t.ngay_hoan_thanh = t.ngay_tao;
   suaDoi(t); ds.push(t); return t;
@@ -511,6 +620,8 @@ function moHop(t){
   $("fTen").value = p.ten || ""; $("fGhi").value = p.ghi_chu || ""; $("fNgay").value = p.han_ngay || "";
   $("fGio").value = p.han_gio || ""; $("fUuTien").value = p.uu_tien || "thuong"; $("fLap").value = p.lap_lai || "khong";
   $("fNguoi").value = p.nguoi_giao || ""; $("fTrangThai").value = p.trang_thai || "chua_lam";
+  chonTrongHop = t ? [...(t.nguoi_thuc_hien || [])] : (p.nguoi_thuc_hien && p.nguoi_thuc_hien.length ? [...p.nguoi_thuc_hien] : nguoiChon.slice());
+  $("fThemNguoi").value = ""; $("fLoiNguoi").textContent = ""; veChonTrongHop();
   $("nutXoaViec").hidden = !t;
   $("hopViec").showModal();
 }
@@ -523,7 +634,8 @@ $("formViec").addEventListener("submit", async e => {
     $("hopViec").close(); t.da_xoa = true; suaDoi(t); daThayDoi(); return;
   }
   if (v && v !== "luu") return;
-  const g = {ten: $("fTen").value.trim(), ghi_chu: $("fGhi").value.trim(), han_ngay: $("fNgay").value, han_gio: $("fGio").value,
+  if (!chonTrongHop.length) { e.preventDefault(); $("fLoiNguoi").textContent = "Chọn ít nhất một người thực hiện."; return; }
+  const g = {nguoi_thuc_hien: chonTrongHop.slice(), ten: $("fTen").value.trim(), ghi_chu: $("fGhi").value.trim(), han_ngay: $("fNgay").value, han_gio: $("fGio").value,
     uu_tien: $("fUuTien").value, lap_lai: $("fLap").value, nguoi_giao: $("fNguoi").value.trim(), trang_thai: $("fTrangThai").value};
   if (!g.ten) return;
   if (dangSua) {
@@ -538,9 +650,90 @@ $("formViec").addEventListener("submit", async e => {
 function themTuONhap(){
   const dong = $("oNhap").value.split("\n").map(x => x.trim()).filter(Boolean);
   if (!dong.length) return;
-  dong.forEach(d => themMoi(phanTich(d)));
+  const viec = dong.map(phanTich);
+  viec.forEach(p => { if (!p.nguoi_thuc_hien.length) p.nguoi_thuc_hien = nguoiChon.slice(); });
+  if (viec.some(p => !p.nguoi_thuc_hien.length)) {
+    $("loiNhap").textContent = "Chưa có người thực hiện: bấm chọn tên ở hàng \"Giao cho\" hoặc viết tên vào câu.";
+    return;
+  }
+  $("loiNhap").textContent = "";
+  viec.forEach(themMoi);
   $("oNhap").value = ""; xemTruoc(); loc = "can_lam"; daThayDoi();
 }
+$("chonNguoi").addEventListener("click", e => {
+  const b = e.target.closest(".ng"); if (!b) return;
+  if (b.dataset.sua) return moDsNguoi();
+  const n = b.dataset.ten;
+  nguoiChon = nguoiChon.includes(n) ? nguoiChon.filter(x => x !== n) : [...nguoiChon, n];
+  ghi(KHOA_CHON, nguoiChon); $("loiNhap").textContent = ""; veChonNguoi(); xemTruoc();
+});
+$("locNguoi").addEventListener("change", e => { locNguoi = e.target.value; veLai(); });
+
+/* ----- chọn người trong hộp Thêm/Sửa việc ----- */
+function veChonTrongHop(){
+  const tap = [...dsNguoi.ds]; chonTrongHop.forEach(n => { if (!tap.includes(n)) tap.push(n); });
+  $("fChonNguoi").innerHTML = tap.map(n => `<button type="button" class="ng ${chonTrongHop.includes(n)?"chon":""}" data-ten="${esc(n)}">${esc(n)}</button>`).join("");
+}
+$("fChonNguoi").addEventListener("click", e => {
+  const b = e.target.closest(".ng"); if (!b) return;
+  const n = b.dataset.ten;
+  chonTrongHop = chonTrongHop.includes(n) ? chonTrongHop.filter(x => x !== n) : [...chonTrongHop, n];
+  $("fLoiNguoi").textContent = ""; veChonTrongHop();
+});
+function themNguoiVaoDs(ten){
+  ten = ten.trim().replace(/\s+/g, " ");
+  if (!ten) return "";
+  ten = ten.split(" ").map(x => x.charAt(0).toUpperCase() + x.slice(1)).join(" ");
+  if (!dsNguoi.ds.includes(ten)) { dsNguoi = {ds: [...dsNguoi.ds, ten], sua_luc: Date.now()}; }
+  return ten;
+}
+$("fNutThemNguoi").onclick = () => {
+  const ten = themNguoiVaoDs($("fThemNguoi").value); if (!ten) return;
+  if (!chonTrongHop.includes(ten)) chonTrongHop.push(ten);
+  $("fThemNguoi").value = ""; $("fLoiNguoi").textContent = ""; veChonTrongHop(); ghi(KHOA_DL, {cong_viec: ds, nguoi: dsNguoi});
+};
+$("fThemNguoi").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); $("fNutThemNguoi").click(); } });
+
+/* ----- hộp sửa danh sách người ----- */
+function moDsNguoi(){
+  banSuaNguoi = dsNguoi.ds.map(n => ({cu: n, moi: n}));
+  $("nguoiMoi").value = ""; $("loiNguoi").textContent = "";
+  veDsSuaNguoi(); $("hopNguoi").showModal();
+}
+function veDsSuaNguoi(){
+  $("dsSuaNguoi").innerHTML = banSuaNguoi.map((x, i) =>
+    `<div class="dong-ng"><input data-i="${i}" value="${esc(x.moi)}"><button type="button" class="nut-xoa" data-xoa="${i}">Xóa</button></div>`).join("")
+    || `<p class="ghi-chu-nho">Danh sách đang trống.</p>`;
+}
+$("dsSuaNguoi").addEventListener("input", e => { const i = e.target.dataset.i; if (i !== undefined) banSuaNguoi[i].moi = e.target.value; });
+$("dsSuaNguoi").addEventListener("click", async e => {
+  const b = e.target.closest("[data-xoa]"); if (!b) return;
+  const x = banSuaNguoi[+b.dataset.xoa];
+  const coViec = ds.filter(t => !t.da_xoa && t.trang_thai !== "hoan_thanh" && (t.nguoi_thuc_hien||[]).includes(x.cu)).length;
+  if (!await xacNhan("Xóa khỏi danh sách?", x.moi || x.cu, "Xóa khỏi danh sách", "do",
+      coViec ? `${x.cu} đang có ${coViec} việc chưa xong. Các việc đó vẫn giữ tên ${x.cu}, chỉ là tên không còn hiện ở hàng chọn nhanh.` : "")) return;
+  banSuaNguoi.splice(+b.dataset.xoa, 1); veDsSuaNguoi();
+});
+$("nutThemNguoiMoi").onclick = () => {
+  const ten = $("nguoiMoi").value.trim().replace(/\s+/g, " "); if (!ten) return;
+  banSuaNguoi.push({cu: "", moi: ten.split(" ").map(x => x.charAt(0).toUpperCase() + x.slice(1)).join(" ")});
+  $("nguoiMoi").value = ""; veDsSuaNguoi();
+};
+$("nguoiMoi").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); $("nutThemNguoiMoi").click(); } });
+$("formNguoi").addEventListener("submit", e => {
+  if (!e.submitter || e.submitter.value !== "luu") return;
+  const moi = banSuaNguoi.map(x => ({...x, moi: x.moi.trim().replace(/\s+/g, " ")})).filter(x => x.moi);
+  const ten = moi.map(x => x.moi);
+  if (new Set(ten).size !== ten.length) { e.preventDefault(); $("loiNguoi").textContent = "Có hai người trùng tên, sửa lại cho khác nhau."; return; }
+  for (const x of moi) if (x.cu && x.cu !== x.moi) {
+    ds.forEach(t => { if ((t.nguoi_thuc_hien||[]).includes(x.cu)) { t.nguoi_thuc_hien = t.nguoi_thuc_hien.map(n => n === x.cu ? x.moi : n); suaDoi(t); } });
+    nguoiChon = nguoiChon.map(n => n === x.cu ? x.moi : n);
+    if (locNguoi === x.cu) locNguoi = x.moi;
+  }
+  dsNguoi = {ds: ten, sua_luc: Date.now()};
+  ghi(KHOA_CHON, nguoiChon); daThayDoi();
+});
+$("nutMoDsNguoi").onclick = () => { $("hopCaiDat").close(); moDsNguoi(); };
 $("nutThem").onclick = themTuONhap;
 $("nutChiTiet").onclick = () => moHop(null);
 $("nutNoi").onclick = () => { window.scrollTo({top: 0, behavior: "smooth"}); setTimeout(() => $("oNhap").focus(), 300); };
@@ -574,7 +767,7 @@ $("danhSach").addEventListener("click", async e => {
 /* ================= LƯU TRỮ GITHUB ================= */
 function trangThai(chu, loi){ const e = $("tt"); e.textContent = chu; e.className = "trang-thai" + (loi ? " loi" : ""); }
 function daThayDoi(){
-  ghi(KHOA_DL, {cong_viec: ds}); veLai();
+  ghi(KHOA_DL, {cong_viec: ds, nguoi: dsNguoi}); veLai();
   if (!daKetNoi()) { trangThai("Đã lưu trên máy này"); return; }
   trangThai("Chờ lưu…"); clearTimeout(henLuu); henLuu = setTimeout(dayLen, 1200);
 }
@@ -596,10 +789,15 @@ async function keoVe(){
   if (r.status === 404) { sha = null; return true; }
   if (!r.ok) throw new Error(await moTaLoi(r));
   const j = await r.json(); sha = j.sha;
-  const xa = (JSON.parse(giaiMa(j.content || "")) || {}).cong_viec || [];
+  const goc = JSON.parse(giaiMa(j.content || "")) || {};
+  const xa = goc.cong_viec || [];
+  const ngXa = goc.nguoi;
+  let canDayNguoi = false;
+  if (ngXa && (ngXa.sua_luc || 0) > (dsNguoi.sua_luc || 0)) dsNguoi = ngXa;
+  else if ((dsNguoi.sua_luc || 0) > ((ngXa && ngXa.sua_luc) || 0)) canDayNguoi = true;
   const mx = new Map(xa.map(t => [t.id, t.sua_luc||0]));
-  const canDay = ds.some(t => !mx.has(t.id) || (t.sua_luc||0) > mx.get(t.id));
-  ds = gop(ds, xa); ghi(KHOA_DL, {cong_viec: ds});
+  const canDay = canDayNguoi || ds.some(t => !mx.has(t.id) || (t.sua_luc||0) > mx.get(t.id));
+  ds = gop(ds, xa); ghi(KHOA_DL, {cong_viec: ds, nguoi: dsNguoi});
   return canDay;
 }
 async function moTaLoi(r){
@@ -619,7 +817,7 @@ async function dayLen(lanThu = 0){
                   .sort((a,b) => (a.ngay_tao||"").localeCompare(b.ngay_tao||""));
     const r = await goiGH("/contents/" + DUONG, {method: "PUT", body: JSON.stringify({
       message: "Cập nhật công việc " + gioStr(new Date()) + " " + ngayStr(new Date()),
-      content: maHoa(JSON.stringify({cong_viec: luu, cap_nhat: new Date().toISOString()}, null, 1)),
+      content: maHoa(JSON.stringify({cong_viec: luu, nguoi: dsNguoi, cap_nhat: new Date().toISOString()}, null, 1)),
       ...(sha ? {sha} : {})})});
     if ((r.status === 409 || r.status === 422) && lanThu < 2) { dangLuu = false; await keoVe(); veLai(); return dayLen(lanThu + 1); }
     if (!r.ok) throw new Error(await moTaLoi(r));
