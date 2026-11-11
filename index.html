@@ -27,14 +27,14 @@ button{cursor:pointer}
 :focus-visible{outline:2px solid var(--lam);outline-offset:2px}
 
 /* ===== Đầu trang: ngày hôm nay ===== */
-.dau{background:var(--reu);color:#fff;padding:18px 20px 64px}
+.dau{background:var(--reu);color:#fff;padding:16px 20px 56px}
 .dau-trong{max-width:760px;margin:0 auto}
 .thanh-tren{display:flex;align-items:center;gap:8px}
 .ten-so{font-weight:700;font-size:15px;flex:1;color:#fff;opacity:.9}
 .nut-dau{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:10px;padding:7px 12px;font-size:14px}
 .nut-dau:hover{background:rgba(255,255,255,.18)}
-.thu{margin:22px 0 0;font-size:17px;color:var(--reu-mo);font-weight:600}
-.ngay-lon{margin:0;font-size:44px;line-height:1.05;font-weight:800;letter-spacing:-.02em}
+.thu{margin:16px 0 0;font-size:16px;color:var(--reu-mo);font-weight:600}
+.ngay-lon{margin:0;font-size:36px;line-height:1.05;font-weight:800;letter-spacing:-.02em}
 .tom-tat{margin:12px 0 0;font-size:15.5px;color:#d6e0ee}
 .tom-tat b{color:#fff}
 .tom-tat .so-do{color:#ffb3ab}
@@ -45,8 +45,8 @@ button{cursor:pointer}
 
 /* ===== Thân ===== */
 .than{max-width:760px;margin:-44px auto 0;padding:0 16px 110px}
-.o-nhap{background:var(--giay);border-radius:16px;padding:14px;box-shadow:0 6px 24px rgba(20,35,60,.12)}
-.o-nhap textarea{width:100%;border:none;resize:none;background:transparent;font-size:16px;line-height:1.5;min-height:52px;padding:4px 2px;outline:none}
+.o-nhap{background:var(--giay);border-radius:16px;padding:12px 12px 10px;box-shadow:0 6px 24px rgba(20,35,60,.12)}
+.o-nhap textarea{width:100%;border:none;resize:none;background:transparent;font-size:16px;line-height:1.5;min-height:28px;padding:4px 2px;outline:none;overflow:hidden}
 .o-nhap textarea::placeholder{color:var(--xam)}
 .xem-truoc:empty{display:none}
 .xem-truoc{border-top:1px solid var(--ke);margin-top:6px;padding-top:6px}
@@ -54,15 +54,18 @@ button{cursor:pointer}
 .dong-xem .ten{font-weight:600;flex:1}
 .dong-xem .han{color:var(--mo);font-size:13px;white-space:nowrap}
 .dong-xem .gap{color:var(--do);font-weight:700;font-size:12px}
-.hang-nhap{display:flex;align-items:center;gap:8px;margin-top:8px}
-.goi-y{flex:1;font-size:12.5px;color:var(--mo)}
+.hang-nhap{display:flex;align-items:center;gap:6px;margin-top:8px;border-top:1px solid var(--ke);padding-top:10px}
+.goi-y{flex:1;font-size:12.5px;color:var(--mo);text-align:right;padding-right:4px}
 .goi-y i{font-style:normal;color:var(--chu);background:var(--nen);border-radius:5px;padding:0 5px}
 .nut-them{background:var(--reu);color:#fff;border:none;border-radius:11px;padding:10px 18px;font-weight:600}
 .nut-them:hover{background:var(--reu-sang)}
 .nut-chi-tiet{background:none;border:none;color:var(--mo);font-size:13.5px;padding:8px 6px;text-decoration:underline;text-underline-offset:3px}
 
-.bao-thu{margin-top:12px;font-size:13.5px;color:var(--mo);background:var(--vang-nhat);border-radius:12px;padding:10px 14px}
-.bao-thu b{color:var(--chu)}
+.bao-thu{margin-top:10px;font-size:13.5px;color:#7a5a14;background:var(--vang-nhat);border-radius:10px;padding:6px 6px 6px 12px;display:flex;align-items:center;gap:8px}
+.bao-thu[hidden]{display:none}
+.bao-thu span{flex:1}
+.bao-thu button{background:var(--reu);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:13px;font-weight:600}
+@media (prefers-color-scheme:dark){.bao-thu{color:#e8c468}}
 
 .loc{display:flex;gap:8px;margin:18px 0 6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
 .loc::-webkit-scrollbar{display:none}
@@ -129,8 +132,16 @@ dialog h2{margin:0 0 14px;font-size:19px}
 .ghi-chu-nho{font-size:13px;color:var(--mo);margin:0 0 14px}
 .ket-qua{font-size:13.5px;min-height:20px;margin-bottom:6px}
 
-.hang-nguoi{display:flex;align-items:center;gap:8px;border-top:1px solid var(--ke);margin-top:8px;padding-top:10px}
-.nhan-nguoi{font-size:13px;color:var(--mo);flex:none}
+.nut-cong-cu{display:inline-flex;align-items:center;gap:6px;background:var(--nen);border:1px solid transparent;border-radius:10px;padding:8px 12px;font-size:14px;color:var(--chu);max-width:46%;white-space:nowrap}
+.nut-cong-cu:hover{border-color:var(--ke)}
+.nut-cong-cu .ten-chon{overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.nut-cong-cu .mui{color:var(--mo);font-size:11px}
+.nut-cong-cu.thieu{background:var(--do-nhat);color:var(--do)}
+.ds-tick{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
+.tick-ng{display:flex;align-items:center;gap:10px;background:var(--nen);border:1px solid transparent;border-radius:10px;padding:11px 12px;font-size:15px;text-align:left;color:var(--chu)}
+.tick-ng .o{width:20px;height:20px;border-radius:6px;border:2px solid var(--xam);display:grid;place-items:center;font-size:13px;color:#fff;flex:none}
+.tick-ng.chon{background:var(--lam-nhat);border-color:var(--lam)}
+.tick-ng.chon .o{background:var(--reu);border-color:var(--reu)}
 .ds-nguoi{display:flex;gap:6px;flex-wrap:wrap;flex:1}
 .ng{border:1px solid var(--ke);background:var(--giay);border-radius:999px;padding:5px 12px;font-size:13.5px;color:var(--chu)}
 .ng.chon{background:var(--reu);border-color:var(--reu);color:#fff}
@@ -153,19 +164,23 @@ dialog h2{margin:0 0 14px;font-size:19px}
 .hop-xn .noi{background:var(--nen);border-radius:12px;padding:12px 14px;margin:0 0 16px;font-weight:600;word-break:break-word}
 .hop-xn .them{font-size:13.5px;color:var(--mo);margin:-8px 0 16px}
 .hop-xn .chan-hop button{flex:1;padding:12px}
+.hop-xn .chan-hop .nut-xoa{flex:none;white-space:nowrap}
 .nut-them.la{background:var(--la)}.nut-them.do{background:var(--do)}
 @media (max-width:620px){
-  .dau{padding:14px 16px 60px}
-  .ngay-lon{font-size:36px}
+  .dau{padding:10px 16px 44px}
+  .thu{margin-top:10px;font-size:14px}
+  .ngay-lon{font-size:27px}
+  .tom-tat{margin-top:6px;font-size:14px}
+  .dai-mau{margin-top:10px;height:6px}
+  .trang-thai{margin-top:6px;min-height:0}
+  .than{margin-top:-32px}
   .nut-dau .chu-dai{display:none}
   .than{padding:0 12px 110px}
   .goi-y{display:none}
-  .hang-nguoi{align-items:flex-start}
-  .nhan-nguoi{padding-top:7px}
   .ng{padding:7px 13px}
   .loc-nguoi{font-size:16px}
-  .hang-nhap{justify-content:flex-end}
-  .nut-them{flex:1;padding:12px}
+  .hang-nhap .nut-them{flex:1;padding:10px 12px}
+  .nut-cong-cu{padding:9px 10px}
   .han-ben .gio{font-size:17px}
   .nut-noi{display:block}
   .hai{grid-template-columns:1fr}
@@ -196,18 +211,18 @@ dialog h2{margin:0 0 14px;font-size:19px}
 
 <main class="than">
   <div class="o-nhap">
-    <textarea id="oNhap" rows="2" placeholder="Hôm nay có việc gì? Ví dụ: Nộp báo cáo quân số 16h thứ 6 gấp"></textarea>
+    <textarea id="oNhap" rows="1" placeholder="Hôm nay có việc gì? Ví dụ: Nộp báo cáo quân số 16h thứ 6 gấp"></textarea>
     <div id="xemTruoc" class="xem-truoc"></div>
-    <div class="hang-nguoi"><span class="nhan-nguoi">Giao cho</span><div id="chonNguoi" class="ds-nguoi"></div></div>
     <div id="loiNhap" class="loi-nhap"></div>
     <div class="hang-nhap">
-      <span class="goi-y">Ghi hạn bằng lời: <i>16h thứ 6</i> <i>ngày mai</i> <i>15/11</i> <i>gấp</i> <i>hàng tuần</i></span>
-      <button class="nut-chi-tiet" id="nutChiTiet">Nhập chi tiết</button>
+      <button type="button" class="nut-cong-cu" id="nutNguoi" title="Chọn người thực hiện"><span aria-hidden="true">👤</span><span id="tenNguoiChon" class="ten-chon">Tú</span><span class="mui" aria-hidden="true">▾</span></button>
+      <button type="button" class="nut-cong-cu" id="nutChiTiet" title="Nhập đầy đủ: ghi chú, mức độ, lặp lại…">Chi tiết</button>
+      <span class="goi-y">Ghi hạn bằng lời: <i>16h thứ 6</i> <i>ngày mai</i> <i>15/11</i> <i>gấp</i></span>
       <button class="nut-them" id="nutThem">Thêm việc</button>
     </div>
   </div>
 
-  <div id="baoThu" class="bao-thu" hidden>Đang dùng thử: việc chỉ lưu trên máy này, máy khác chưa xem được. Bấm <b>⚙ Cài đặt</b> để kết nối, các việc đã nhập vẫn được giữ.</div>
+  <div id="baoThu" class="bao-thu" hidden><span>Chưa kết nối: việc chỉ lưu trên máy này.</span><button type="button" id="nutKetNoi">Kết nối</button></div>
 
   <nav class="loc" id="theSo"></nav>
   <div class="hang-loc">
@@ -257,6 +272,19 @@ dialog h2{margin:0 0 14px;font-size:19px}
     <div class="chan-hop">
       <button class="nut-phu" value="khong">Hủy</button>
       <button class="nut-them" value="co" id="xnDongY">Đồng ý</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="hopChonNguoi" class="hop-xn">
+  <form method="dialog">
+    <h2>Giao cho</h2>
+    <p class="ghi-chu-nho">Chọn một hoặc nhiều người. Lần sau web nhớ lựa chọn này.</p>
+    <div id="dsChonNguoi" class="ds-tick"></div>
+    <div class="chan-hop">
+      <button type="button" class="nut-xoa" id="nutSuaDsTuChon" style="color:var(--lam)">Sửa danh sách</button>
+      <span class="day"></span>
+      <button class="nut-them" value="xong">Xong</button>
     </div>
   </form>
 </dialog>
@@ -477,11 +505,13 @@ function tatCaNguoi(){
 }
 function veChonNguoi(){
   nguoiChon = nguoiChon.filter(n => dsNguoi.ds.includes(n));
-  $("chonNguoi").innerHTML = dsNguoi.ds.map(n => `<button type="button" class="ng ${nguoiChon.includes(n)?"chon":""}" data-ten="${esc(n)}">${esc(n)}</button>`).join("")
-    + `<button type="button" class="ng sua" data-sua="1">+ Sửa danh sách</button>`;
+  const nhan = !nguoiChon.length ? "Chọn người" : nguoiChon.length <= 2 ? nguoiChon.join(", ") : `${nguoiChon.slice(0,2).join(", ")} +${nguoiChon.length-2}`;
+  $("tenNguoiChon").textContent = nhan;
+  $("nutNguoi").classList.toggle("thieu", !nguoiChon.length);
+  $("dsChonNguoi").innerHTML = dsNguoi.ds.map(n => `<button type="button" class="tick-ng ${nguoiChon.includes(n)?"chon":""}" data-ten="${esc(n)}"><span class="o">${nguoiChon.includes(n)?"✓":""}</span>${esc(n)}</button>`).join("");
   const tap = tatCaNguoi();
   if (locNguoi && !tap.includes(locNguoi)) locNguoi = "";
-  $("locNguoi").innerHTML = `<option value="">Tất cả mọi người</option>` + tap.map(n => `<option value="${esc(n)}" ${n===locNguoi?"selected":""}>${esc(n)}</option>`).join("");
+  $("locNguoi").innerHTML = `<option value="">Mọi người</option>` + tap.map(n => `<option value="${esc(n)}" ${n===locNguoi?"selected":""}>${esc(n)}</option>`).join("");
   $("locNguoi").classList.toggle("dang-loc", !!locNguoi);
 }
 function veLai(){
@@ -653,16 +683,18 @@ function themTuONhap(){
   const viec = dong.map(phanTich);
   viec.forEach(p => { if (!p.nguoi_thuc_hien.length) p.nguoi_thuc_hien = nguoiChon.slice(); });
   if (viec.some(p => !p.nguoi_thuc_hien.length)) {
-    $("loiNhap").textContent = "Chưa có người thực hiện: bấm chọn tên ở hàng \"Giao cho\" hoặc viết tên vào câu.";
+    $("loiNhap").textContent = "Chưa có người thực hiện: bấm nút 👤 để chọn, hoặc viết tên vào câu.";
     return;
   }
   $("loiNhap").textContent = "";
   viec.forEach(themMoi);
-  $("oNhap").value = ""; xemTruoc(); loc = "can_lam"; daThayDoi();
+  $("oNhap").value = ""; coGian(); xemTruoc(); loc = "can_lam"; daThayDoi();
 }
-$("chonNguoi").addEventListener("click", e => {
-  const b = e.target.closest(".ng"); if (!b) return;
-  if (b.dataset.sua) return moDsNguoi();
+$("nutNguoi").onclick = () => { veChonNguoi(); $("hopChonNguoi").showModal(); };
+$("nutSuaDsTuChon").onclick = () => { $("hopChonNguoi").close(); moDsNguoi(); };
+$("nutKetNoi").onclick = () => $("nutCaiDat").click();
+$("dsChonNguoi").addEventListener("click", e => {
+  const b = e.target.closest(".tick-ng"); if (!b) return;
   const n = b.dataset.ten;
   nguoiChon = nguoiChon.includes(n) ? nguoiChon.filter(x => x !== n) : [...nguoiChon, n];
   ghi(KHOA_CHON, nguoiChon); $("loiNhap").textContent = ""; veChonNguoi(); xemTruoc();
@@ -737,7 +769,8 @@ $("nutMoDsNguoi").onclick = () => { $("hopCaiDat").close(); moDsNguoi(); };
 $("nutThem").onclick = themTuONhap;
 $("nutChiTiet").onclick = () => moHop(null);
 $("nutNoi").onclick = () => { window.scrollTo({top: 0, behavior: "smooth"}); setTimeout(() => $("oNhap").focus(), 300); };
-$("oNhap").addEventListener("input", xemTruoc);
+function coGian(){ const o = $("oNhap"); o.style.height = "auto"; o.style.height = Math.min(o.scrollHeight, 220) + "px"; }
+$("oNhap").addEventListener("input", () => { coGian(); xemTruoc(); });
 $("oNhap").addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); themTuONhap(); } });
 $("oTim").addEventListener("input", e => { timKiem = e.target.value.trim(); veLai(); });
 $("theSo").addEventListener("click", e => { const o = e.target.closest(".chip"); if (o) { loc = o.dataset.loc; veLai(); } });
