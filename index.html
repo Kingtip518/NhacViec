@@ -129,6 +129,11 @@ dialog h2{margin:0 0 14px;font-size:19px}
 .ghi-chu-nho{font-size:13px;color:var(--mo);margin:0 0 14px}
 .ket-qua{font-size:13.5px;min-height:20px;margin-bottom:6px}
 
+.hop-xn{width:min(420px,calc(100vw - 32px))}
+.hop-xn .noi{background:var(--nen);border-radius:12px;padding:12px 14px;margin:0 0 16px;font-weight:600;word-break:break-word}
+.hop-xn .them{font-size:13.5px;color:var(--mo);margin:-8px 0 16px}
+.hop-xn .chan-hop button{flex:1;padding:12px}
+.nut-them.la{background:var(--la)}.nut-them.do{background:var(--do)}
 @media (max-width:620px){
   .dau{padding:14px 16px 60px}
   .ngay-lon{font-size:36px}
@@ -140,7 +145,7 @@ dialog h2{margin:0 0 14px;font-size:19px}
   .han-ben .gio{font-size:17px}
   .nut-noi{display:block}
   .hai{grid-template-columns:1fr}
-  dialog{width:100vw;max-width:100vw;margin:auto 0 0;border-radius:20px 20px 0 0;max-height:92vh}
+  dialog,.hop-xn{width:100vw;max-width:100vw;margin:auto 0 0;border-radius:20px 20px 0 0;max-height:92vh}
   dialog form{padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
   .truong input,.truong select,.truong textarea{font-size:16px}
 }
@@ -206,6 +211,18 @@ dialog h2{margin:0 0 14px;font-size:19px}
       <span class="day"></span>
       <button class="nut-phu" value="huy" formnovalidate>Đóng</button>
       <button class="nut-them" value="luu">Lưu</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="hopXacNhan" class="hop-xn">
+  <form method="dialog">
+    <h2 id="xnTieuDe">Xác nhận</h2>
+    <div class="noi" id="xnNoi"></div>
+    <p class="them" id="xnThem" hidden></p>
+    <div class="chan-hop">
+      <button class="nut-phu" value="khong">Hủy</button>
+      <button class="nut-them" value="co" id="xnDongY">Đồng ý</button>
     </div>
   </form>
 </dialog>
@@ -447,6 +464,19 @@ function xemTruoc(){
   }).join("");
 }
 
+/* ================= HỘP XÁC NHẬN ================= */
+function xacNhan(tieuDe, noiDung, chuNut, mau = "", them = ""){
+  return new Promise(xong => {
+    const h = $("hopXacNhan");
+    $("xnTieuDe").textContent = tieuDe; $("xnNoi").textContent = noiDung;
+    $("xnThem").textContent = them; $("xnThem").hidden = !them;
+    $("xnDongY").textContent = chuNut; $("xnDongY").className = "nut-them " + mau;
+    h.returnValue = "";
+    h.addEventListener("close", () => xong(h.returnValue === "co"), {once: true});
+    h.showModal(); $("xnDongY").blur();
+  });
+}
+
 /* ================= THAO TÁC ================= */
 function suaDoi(t){ t.sua_luc = Date.now(); }
 function themMoi(p){
@@ -484,11 +514,13 @@ function moHop(t){
   $("nutXoaViec").hidden = !t;
   $("hopViec").showModal();
 }
-$("formViec").addEventListener("submit", e => {
+$("formViec").addEventListener("submit", async e => {
   const v = e.submitter && e.submitter.value;
   if (v === "xoa" && dangSua) {
-    if (!confirm(`Xóa việc "${dangSua.ten}"?`)) { e.preventDefault(); return; }
-    dangSua.da_xoa = true; suaDoi(dangSua); daThayDoi(); return;
+    e.preventDefault();
+    const t = dangSua;
+    if (!await xacNhan("Xóa hẳn việc này?", t.ten, "Xóa việc", "do", "Việc đã xóa sẽ không xem lại được nữa.")) return;
+    $("hopViec").close(); t.da_xoa = true; suaDoi(t); daThayDoi(); return;
   }
   if (v && v !== "luu") return;
   const g = {ten: $("fTen").value.trim(), ghi_chu: $("fGhi").value.trim(), han_ngay: $("fNgay").value, han_gio: $("fGio").value,
@@ -516,15 +548,26 @@ $("oNhap").addEventListener("input", xemTruoc);
 $("oNhap").addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); themTuONhap(); } });
 $("oTim").addEventListener("input", e => { timKiem = e.target.value.trim(); veLai(); });
 $("theSo").addEventListener("click", e => { const o = e.target.closest(".chip"); if (o) { loc = o.dataset.loc; veLai(); } });
-$("danhSach").addEventListener("click", e => {
+$("danhSach").addEventListener("click", async e => {
   const b = e.target.closest("button[data-hd]"); if (!b) return;
   const t = ds.find(x => x.id === b.closest(".viec").dataset.id); if (!t) return;
   const hd = b.dataset.hd;
-  if (hd === "bat_dau") { t.trang_thai = "dang_lam"; suaDoi(t); }
-  else if (hd === "xong") { hoanThanh(t); vuaXong = t.id; }
-  else if (hd === "ve_chua") { t.trang_thai = "chua_lam"; suaDoi(t); }
-  else if (hd === "lam_lai") { t.trang_thai = "chua_lam"; t.ngay_hoan_thanh = ""; suaDoi(t); }
-  else if (hd === "sua") return moHop(t);
+  if (hd === "sua") return moHop(t);
+  if (hd === "xong") {
+    const them = t.lap_lai !== "khong" && t.han_ngay && !t.da_tao_ke_tiep
+      ? `Đây là việc ${TEN_LAP[t.lap_lai].toLowerCase()}, web sẽ tự tạo việc kỳ sau với hạn ${moTaHan({han_ngay: hanKeTiep(t), han_gio: t.han_gio})}.` : "";
+    if (!await xacNhan("Đánh dấu đã hoàn thành?", t.ten, "Đã hoàn thành", "la", them)) return;
+    hoanThanh(t); vuaXong = t.id;
+  } else if (hd === "lam_lai") {
+    if (!await xacNhan("Chuyển về chưa xong?", t.ten, "Chuyển về chưa xong", "", "Việc sẽ quay lại danh sách cần làm.")) return;
+    t.trang_thai = "chua_lam"; t.ngay_hoan_thanh = ""; suaDoi(t);
+  } else if (hd === "bat_dau") {
+    if (!await xacNhan("Bắt đầu làm việc này?", t.ten, "Bắt đầu làm")) return;
+    t.trang_thai = "dang_lam"; suaDoi(t);
+  } else if (hd === "ve_chua") {
+    if (!await xacNhan("Tạm dừng việc này?", t.ten, "Tạm dừng", "", "Việc chuyển về mục Chưa làm.")) return;
+    t.trang_thai = "chua_lam"; suaDoi(t);
+  } else return;
   daThayDoi();
 });
 
@@ -597,7 +640,7 @@ $("nutCaiDat").onclick = () => { $("cChu").value = cfg.chu || "Kingtip518"; $("c
 $("formCaiDat").addEventListener("submit", async e => {
   const v = e.submitter && e.submitter.value;
   if (v === "huy") return;
-  if (v === "ngat") { if (confirm("Ngắt kết nối trên máy này? Dữ liệu trên GitHub vẫn còn nguyên.")) { cfg = {}; ghi(KHOA_CH, cfg); sha = null; veLai(); trangThai(""); } return; }
+  if (v === "ngat") { e.preventDefault(); if (await xacNhan("Ngắt kết nối trên máy này?", "Máy này sẽ không xem và lưu được việc trên GitHub nữa.", "Ngắt kết nối", "do", "Dữ liệu trên GitHub vẫn còn nguyên.")) { $("hopCaiDat").close(); cfg = {}; ghi(KHOA_CH, cfg); sha = null; veLai(); trangThai(""); } return; }
   e.preventDefault();
   const moi = {chu: $("cChu").value.trim(), kho: $("cKho").value.trim(), ma: $("cMa").value.trim()};
   if (!moi.chu || !moi.kho || !moi.ma) { $("cKetQua").textContent = "Điền đủ 3 ô."; return; }
@@ -605,7 +648,7 @@ $("formCaiDat").addEventListener("submit", async e => {
   try {
     const r = await goiGH(""); if (!r.ok) throw new Error(await moTaLoi(r));
     const j = await r.json();
-    if (!j.private && !confirm("Chú ý: kho này đang để CÔNG KHAI, ai cũng xem được danh sách công việc. Vẫn dùng?")) { cfg = cu; return; }
+    if (!j.private && !await xacNhan("Kho đang để công khai", "Ai cũng xem được danh sách công việc trong kho này.", "Vẫn dùng", "do", "Nên chuyển kho sang Riêng tư trong phần Settings của kho.")) { cfg = cu; $("cKetQua").textContent = ""; return; }
     ghi(KHOA_CH, cfg); $("hopCaiDat").close();
     await dongBo();
   } catch (err) { cfg = cu; $("cKetQua").textContent = "❌ " + err.message; }
