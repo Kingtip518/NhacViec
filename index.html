@@ -384,6 +384,81 @@ function tachNguoi(chuoi){
   return {con: s, nguoi: thay};
 }
 
+/* ================= KHÔI PHỤC DẤU THEO TỪ ĐIỂN ================= */
+// Cụm từ đúng chính tả. Web bỏ dấu chữ người gõ rồi so với bảng này, nên gõ thiếu dấu, sai dấu, không dấu đều sửa được.
+const CUM_TU = `kế hoạch|báo cáo|huấn luyện|tuyển quân|quân sự|dân quân|tự vệ|dân quân tự vệ|chỉ huy|chỉ huy trưởng|phó chỉ huy trưởng|chính trị viên|
+diễn tập|phòng thủ|khu vực phòng thủ|thiên tai|cứu nạn|cứu hộ|tìm kiếm cứu nạn|phòng chống|cháy nổ|cháy rừng|cứu sập|hồ sơ|hội nghị|giao ban|
+kiểm tra|tổng kết|sơ kết|xây dựng|triển khai|chuẩn bị|thực hiện|tham mưu|quyết định|công văn|tờ trình|đề nghị|danh sách|nghĩa vụ|nghĩa vụ quân sự|
+khám tuyển|sức khỏe|gia đình|ủy ban|nhân dân|ủy ban nhân dân|hội đồng nhân dân|đảng ủy|chi bộ|thông báo|thời gian|địa điểm|vũ khí|trang bị|hậu cần|
+tài chính|quyết toán|dự toán|mua sắm|nhiệm vụ|trực ban|trực chỉ huy|sẵn sàng|chiến đấu|sẵn sàng chiến đấu|phối hợp|hướng dẫn|tổng hợp|cập nhật|
+xác minh|đột xuất|xử lý|sử dụng|giải quyết|trao đổi|kiểm điểm|cơ quan|đảm bảo|bảo đảm|bổ sung|lý lịch|sơ yếu lý lịch|giấy tờ|phê duyệt|tuần tra|
+canh gác|văn bản|biên bản|tập huấn|bồi dưỡng|giáo dục|quốc phòng|an ninh|quốc phòng an ninh|giáo dục quốc phòng|sắp xếp|rà soát|thống nhất|hoàn thành|
+thành lập|công tác|đơn vị|cán bộ|chiến sĩ|quân nhân|dự bị|động viên|dự bị động viên|quân nhân dự bị|đăng ký|độ tuổi|thanh niên|nhập ngũ|xuất ngũ|
+giao quân|lễ giao quân|hội trường|phòng họp|lịch công tác|chương trình|nội dung|phương án|tác chiến|kinh phí|ngân sách|lương thực|thực phẩm|
+lương thực thực phẩm|nhà ăn|bếp ăn|doanh trại|thao trường|bãi tập|đạn dược|kho tàng|bảo quản|niêm cất|sửa chữa|phương tiện|thông tin|liên lạc|
+chỉ thị|nghị quyết|nghị định|thông tư|điều lệnh|quy định|quy chế|hàng ngày|hằng ngày|hàng tuần|hàng tháng|hôm nay|ngày mai|ngày kia|sáng mai|chiều mai|
+tối mai|cuối tháng|cuối tuần|tuần sau|tuần tới|tháng sau|thứ hai|thứ ba|thứ tư|thứ năm|thứ sáu|thứ bảy|chủ nhật|buổi sáng|buổi chiều|buổi tối|hội ý|
+làm việc|đoàn kiểm tra|đoàn công tác|cấp trên|cấp ủy|chính quyền|mặt trận|mặt trận tổ quốc|đoàn thể|công an|biên phòng|tổ dân phố|khu phố|khu dân cư|
+trưởng thôn|người dân|học sinh|sinh viên|nhà trường|trường học|bệnh viện|trạm y tế|y tế|tiêm phòng|vệ sinh|môi trường|an toàn|giao thông|phòng cháy|
+chữa cháy|phòng cháy chữa cháy|lũ lụt|sạt lở|ngập lụt|di dời|sơ tán|cứu trợ|hỗ trợ|khắc phục|hậu quả|thiệt hại|thống kê|số liệu|phụ lục|biểu mẫu|
+in ấn|ký duyệt|trình ký|đóng dấu|liên hệ|điện thoại|nhắc nhở|đôn đốc|theo dõi|giám sát|đánh giá|xếp loại|thi đua|khen thưởng|kỷ luật|kết quả|tình hình|
+công việc|tổ chức|chỉ đạo|lãnh đạo|chủ trì|tham dự|tham gia|có mặt|đúng giờ|chuyển phát|văn phòng|kế toán|thủ quỹ|thủ kho|kho vũ khí|kho quân trang|
+quân trang|quân phục|quân tư trang|ban chỉ huy|ban chỉ huy quân sự|bộ chỉ huy|bộ chỉ huy quân sự|quân khu|bộ quốc phòng|thành phố|tỉnh ủy|huyện ủy|
+đảng viên|chi ủy|bí thư|phó bí thư|chủ tịch|phó chủ tịch|trưởng ban|phó ban|trợ lý|nhân viên|chính trị|tác huấn|hậu cần kỹ thuật|kỹ thuật|
+sẵn sàng động viên|lực lượng|lực lượng vũ trang|dân quân thường trực|dân quân cơ động|tiểu đội|trung đội|đại đội|khẩu đội|học tập|nghị quyết đảng|
+sinh hoạt|sinh hoạt chi bộ|bỏ phiếu|tiếp dân|tiếp nhận|bàn giao|giao nhận|xin ý kiến|ý kiến|góp ý|chỉnh sửa|hoàn thiện|trình bày|thuyết minh|
+dự thảo|chính thức|khẩn cấp|hỏa tốc|của|các|và|để|về|với|là|có|tại|đã|những|được|một|việc|làm|họp|gửi|nộp|nhận|lấy|chuyển|ký|xã|phường|thôn|
+giờ|phút|đến|đi|lên|xuống|vào|cùng|chưa|rồi|nhé|gấp|khẩn|lúc|trước|ngoài|tháng|tuần|nâng cao|cung cấp|cung ứng|định kỳ|kỳ họp|học kỳ|tiết kiệm|thông qua|ban ngành|các ban ngành|ngành|chất lượng|năm học|năm nay|năm sau|tháng này|tuần này|hôm qua|trường hợp|đầy đủ|kịp thời|đúng hạn|hạn chót|chậm nhất|số lượng|quân số|tổng số|báo cáo quân số`;
+const BANG_DAU = new Map();
+(() => {
+  const trung = new Set();
+  for (const t of CUM_TU.split("|").map(x => x.trim()).filter(Boolean)) {
+    const k = boDau(t);
+    if (BANG_DAU.has(k) && BANG_DAU.get(k) !== t) trung.add(k); else BANG_DAU.set(k, t);
+  }
+  trung.forEach(k => BANG_DAU.delete(k));
+})();
+function boDau(x){ return x.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[đĐ]/g, "d").toLowerCase(); }
+function khoiPhucDau(chu){
+  const daSuaTruoc = [];
+  // "thu 6" → "thứ 6", "nam 2027" → "năm 2027" (chữ thường, đứng trước số)
+  chu = chu.replace(/(^|\s)(thu|thư|thừ|thú)(?=\s*[2-7](?:\s|$|[,.;]))/gu, (t, p, w) => { daSuaTruoc.push([w, "thứ"]); return p + "thứ"; })
+           .replace(/(^|\s)(nam|nâm|nắm)(?=\s+\d{4}(?:\s|$|[,.;]))/gu, (t, p, w) => { daSuaTruoc.push([w, "năm"]); return p + "năm"; });
+  const phan = chu.split(/([\s,.;:!?()"'\/\-–]+)/);
+  const viTri = []; phan.forEach((x, i) => { if (x && i % 2 === 0) viTri.push(i); });
+  const daSua = daSuaTruoc;
+  for (let a = 0; a < viTri.length; ) {
+    let buoc = 1;
+    for (let n = Math.min(4, viTri.length - a); n >= 1; n--) {
+      const chiSo = viTri.slice(a, a + n);
+      if (n > 1 && !chiSo.slice(1).every(i => /^\s+$/.test(phan[i - 1]))) continue;  // các chữ phải liền nhau, chỉ cách bằng dấu cách
+      const goTay = chiSo.map(i => phan[i]);
+      if (goTay.some(w => /\d/.test(w) || (w.length > 1 && w === w.toUpperCase() && /[A-ZĐ]/.test(w)))) continue; // bỏ qua số, chữ viết tắt
+      const dung = BANG_DAU.get(boDau(goTay.join(" ")));
+      if (!dung) continue;
+      const thuong = goTay.join(" ").toLowerCase();
+      if (n > 1 && thuong !== dung && goTay.some(w => dsNguoi.ds.includes(w))) continue;   // cụm có tên người (Chi, Thành…) thì không tự đổi
+      if (n === 1) {
+        const w = goTay[0];
+        if (boDau(w) !== w.toLowerCase()) { buoc = 1; break; }              // chữ đơn đã có dấu: giữ nguyên
+        if (a > 0 && w[0] !== w[0].toLowerCase()) { buoc = 1; break; }       // chữ viết hoa giữa câu có thể là tên người
+      }
+      if (thuong !== dung) {
+        const tuDung = dung.split(" ");
+        chiSo.forEach((i, k) => {
+          let w = tuDung[k];
+          if (phan[i][0] !== phan[i][0].toLowerCase()) w = w[0].toUpperCase() + w.slice(1);
+          phan[i] = w;
+        });
+        daSua.push([goTay.join(" "), chiSo.map(i => phan[i]).join(" ")]);
+      }
+      buoc = n; break;
+    }
+    a += buoc;
+  }
+  return {chu: phan.join(""), da_sua: daSua};
+}
+
 /* ================= TỰ SỬA CHÍNH TẢ VÀ VIẾT HOA ================= */
 // Bảng lỗi gõ hay gặp: [chữ gõ sai, chữ đúng]. Chỉ đưa vào những chữ sai không trùng với từ có nghĩa khác.
 const LOI_GO = [
@@ -448,6 +523,7 @@ function chuanHoa(chu){
   if (!chu) return {chu: "", da_sua: []};
   const goc = chu, daSua = [];
   let s = chu.replace(/\s+/g, " ").trim();
+  const kp = khoiPhucDau(s); s = kp.chu; daSua.push(...kp.da_sua);
   // dấu câu: bỏ cách trước dấu, thêm cách sau dấu phẩy/chấm phẩy khi liền chữ
   s = s.replace(/\s+([,.;:!?])/g, "$1").replace(/([,;])(?=[^\s\d])/g, "$1 ").replace(/([.!?])(?=[A-Za-zÀ-ỹĐđ])/g, "$1 ");
   for (const [re, sai, dung] of QUY_TAC) {
@@ -467,6 +543,10 @@ function chuanHoa(chu){
     if (chuTat !== hoa) daSua.push([chuTat, hoa]);
     return truoc + hoa;
   });
+  // "ban CHQS", "bộ chỉ huy" là tên cơ quan: viết hoa chữ đầu
+  s = s.replace(/(^|[\s,(])(ban|bộ)(?=\s+(?:CHQS|BCHQS|chỉ huy|Chỉ huy))/gu, (tat, truoc, w) => {
+    const W = w[0].toUpperCase() + w.slice(1); daSua.push([w, W]); return truoc + W;
+  });
   s = s.replace(RE_LAP, (tat, truoc, tu) => { daSua.push([tat.slice(truoc.length), tu]); return truoc + tu; });
   // viết hoa chữ đầu câu và sau dấu chấm, chấm hỏi, chấm than
   s = s.replace(/(^|[.!?]\s+)([a-zà-ỹđ])/gu, (tat, truoc, c) => truoc + c.toUpperCase());
@@ -478,7 +558,8 @@ function chuanHoa(chu){
 /* ================= ĐỌC HẠN CHÓT VIẾT BẰNG LỜI ================= */
 const SO_THU = {"2":1,"3":2,"4":3,"5":4,"6":5,"7":6,"hai":1,"ba":2,"tư":3,"năm":4,"sáu":5,"bảy":6};
 function phanTich(dong){
-  const tn = tachNguoi(dong.trim().replace(/\s+/g," "));
+  const kp0 = khoiPhucDau(dong.trim().replace(/\s+/g," "));
+  const tn = tachNguoi(kp0.chu);
   let s = " " + tn.con + " ";
   const kq = {ten:"", han_ngay:"", han_gio:"", uu_tien:"thuong", lap_lai:"khong", nguoi_thuc_hien: tn.nguoi};
   const CUOI = "(?=[\\s,.;])";
@@ -532,7 +613,8 @@ function phanTich(dong){
   let ten = s.replace(/\s+/g," ").trim().replace(/[,;]\s*$/,"");
   for (let i = 0; i < 3; i++) ten = ten.replace(/\s*(?:trước|lúc|vào|hạn chót|hạn|chậm nhất)\s*$/iu, "").trim();
   kq.ten = ten.replace(/^[-–•*\d.)\s]+(?=\S)/u, "").trim() || tn.con || dong.trim();
-  const ch = chuanHoa(kq.ten); kq.ten = ch.chu; kq.da_sua = ch.da_sua;
+  const ch = chuanHoa(kq.ten); kq.ten = ch.chu;
+  kq.da_sua = [...kp0.da_sua, ...ch.da_sua].filter((x, i, m) => m.findIndex(y => y[0] === x[0] && y[1] === x[1]) === i);
   kq.ten = kq.ten.charAt(0).toUpperCase() + kq.ten.slice(1);
   return kq;
 }
